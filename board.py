@@ -2,6 +2,7 @@ from typing import *
 
 
 class Board:
+
     def __init__(self):
         self.board = [[None for i in range(8)] for j in range(8)]
         self.white_pieces = []
