@@ -26,7 +26,7 @@ class Board:
                 low_row += 1
         else:
             low_point, high_point = min(square_1, square_2, key=lambda square: square[0]), max(square_1, square_2, key=lambda square: square[0])
-            while low_point[0] < high_point[0]:
+            while low_point[0] < high_point[0] -1:
                 if low_point[1] < high_point[1]:
                     low_point[1] += 1
                 else:
