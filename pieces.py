@@ -2,9 +2,8 @@ import typing
 SIZE = 8
 
 
-def valid_square(sqr: list[int]):
-    i = sqr[0], j = sqr[1]
-    return 0 <= i < SIZE and 0 <= j < SIZE
+def valid_square(sqr):
+    return 0 <= sqr[0] < SIZE and 0 <= sqr[1] < SIZE
 
 
 def king_moves(sqr: list):
@@ -53,8 +52,9 @@ class Pieces:
         return self.color
 
     def knight_moves(self, sqr: list):
-        for i in [-1, 1]:
-            for j in [-2, 2]:
+        pass
+        # for i in [-1, 1]:
+        #     for j in [-2, 2]:
 
 
     def pawn_moves(self, sqr: list):
