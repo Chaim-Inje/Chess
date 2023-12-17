@@ -52,7 +52,7 @@ class Board:
             return False
         else:
             self[square] = piece
-            self.black_and_white_pieces[piece.color()].append(piece)
+            self.black_and_white_pieces[piece.color()].append(square)
             if piece.name() == "king":
                 if piece.color():
                     self.white_king = square
