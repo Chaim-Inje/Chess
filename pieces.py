@@ -1,7 +1,7 @@
 import typing
 SIZE = 8
-WHITE = 1
-BLACK = 0
+WHITE = True
+BLACK = False
 
 
 def valid_square(sqr):
@@ -91,19 +91,3 @@ class Pieces:
     def possible_eats(self, sqr: list):
         return pawn_eats(sqr, self.color) if self.name == "pawn" else\
             self.funcs[self.name](sqr)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    print(pawn_eats([4,4], BLACK))
