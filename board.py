@@ -5,10 +5,15 @@ class Board:
 
     def __init__(self):
         self.board = [[None for i in range(8)] for j in range(8)]
-        self.white_pieces = []
-        self.black_pieces = []
+        self.black_and_white_pieces = [[],[]]
+
+        self.white_king: Optional[List[int]] = None
+        self.black_king: Optional[List[int]] = None
 
     def __getitem__(self, square: List[int]):
+        return self.board[square[0]][square[1]]
+
+    def __setitem__(self, square: List[int]):
         return self.board[square[0]][square[1]]
 
     def square_content(self, square):
@@ -39,11 +44,19 @@ class Board:
                     return True
         return False
 
-
     def insert_piece(self, piece, square: List[int]):
+        if piece.name() == "king":
+            if (piece.color() and self.white_king) or (not piece.color() and self.black_king):
+                return False
         if self[square]:
             return False
         else:
             self[square] = piece
-            return True
+            self.black_and_white_pieces[piece.color()].append(piece)
+            if piece.name() == "king":
+                if piece.color():
+                    self.white_king = square
+                else:
+                    self.black_king = square
+        return True
 
