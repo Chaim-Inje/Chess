@@ -1,5 +1,7 @@
 import typing
 SIZE = 8
+WHITE = 1
+BLACK = 0
 
 
 def valid_square(sqr):
@@ -44,18 +46,40 @@ def bishop_moves(sqr: list):
     return moves
 
 
-class Pieces:
-    def __init__(self, name: str, color: str):
-        self.name = name, self.color = color
+def knight_moves(sqr: list):
+    moves = []
+    for i in [-1, 1]:
+        for j in [-2, 2]:
+            if valid_square([sqr[0]+i, sqr[1]+j]):
+                moves.append([sqr[0]+i, sqr[1]+j])
+            if valid_square([sqr[0]+j, sqr[1]+i]):
+                moves.append([sqr[0]+j, sqr[1]+i])
+    return moves
 
-    def color(self) -> str:
+
+def pawn_moves(sqr: list, color: int):
+    move = [sqr[0]+1, sqr[1]] if color else [sqr[0]-1, sqr[1]]
+    return [move] if valid_square(move) else []
+
+
+def pawn_eats(sqr: list, color: int):
+    i = 1 if color else -1
+    moves = []
+    for j in [1, -1]:
+        if valid_square([sqr[0]+i, sqr[1]+j]):
+            moves.append([sqr[0]+i, sqr[1]+j])
+    return moves
+
+
+class Pieces:
+    def __init__(self, name: str, color: bool):
+        self.name = name
+        self.color = color
+
+    def color(self) -> bool:
         return self.color
 
-    def knight_moves(self, sqr: list):
-        pass
-        # for i in [-1, 1]:
-        #     for j in [-2, 2]:
+    def name(self) -> str:
+        return self.name
 
-
-    def pawn_moves(self, sqr: list):
-        pass
+    print(pawn_eats([4,4], BLACK))
