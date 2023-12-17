@@ -72,6 +72,8 @@ def pawn_eats(sqr: list, color: int):
 
 
 class Pieces:
+    funcs = {"king": king_moves, "queen": queen_moves, "rook": rook_moves,
+             "bishop": bishop_moves, "knight": knight_moves}
     def __init__(self, name: str, color: bool):
         self.name = name
         self.color = color
@@ -81,5 +83,27 @@ class Pieces:
 
     def name(self) -> str:
         return self.name
+
+    def possible_moves(self, sqr: list):
+        return pawn_moves(sqr, self.color) if self.name == "pawn" else\
+            self.funcs[self.name](sqr)
+
+    def possible_eats(self, sqr: list):
+        return pawn_eats(sqr, self.color) if self.name == "pawn" else\
+            self.funcs[self.name](sqr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     print(pawn_eats([4,4], BLACK))
