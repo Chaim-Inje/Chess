@@ -1,4 +1,4 @@
-from typing import *
+#from typing import *
 
 
 class Board:
@@ -7,14 +7,14 @@ class Board:
         self.board = [[None for i in range(8)] for j in range(8)]
         self.black_and_white_pieces = [[],[]]
 
-        self.white_king: Optional[List[int]] = None
-        self.black_king: Optional[List[int]] = None
+        self.white_king = None
+        self.black_king = None
 
-    def __getitem__(self, square: List[int]):
+    def __getitem__(self, square):
         return self.board[square[0]][square[1]]
 
-    def __setitem__(self, square: List[int]):
-        return self.board[square[0]][square[1]]
+    def __setitem__(self, square, value):
+        self.board[square[0]][square[1]] = value
 
     def square_content(self, square):
         return self[square]
@@ -34,7 +34,7 @@ class Board:
                 low_row += 1
         else:
             low_point, high_point = min(square_1, square_2, key=lambda square: square[0]), max(square_1, square_2, key=lambda square: square[0])
-            while low_point[0] < high_point[0] -1:
+            while low_point[0] < high_point[0] - 1:
                 if low_point[1] < high_point[1]:
                     low_point[1] += 1
                 else:
@@ -44,7 +44,7 @@ class Board:
                     return True
         return False
 
-    def insert_piece(self, piece, square: List[int]):
+    def insert_piece(self, piece, square):
         if piece.name() == "king":
             if (piece.color() and self.white_king) or (not piece.color() and self.black_king):
                 return False
