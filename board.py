@@ -8,8 +8,11 @@ class Board:
         self.white_pieces = []
         self.black_pieces = []
 
-    def square_content(self, square):
+    def __getitem__(self, square: List[int]):
         return self.board[square[0]][square[1]]
+
+    def square_content(self, square):
+        return self[square]
 
     def if_blocked(self, square_1, square_2):
         if square_1[0] == square_2[0]:
@@ -32,8 +35,15 @@ class Board:
                 else:
                     low_point[1] -= 1
                 low_point[0] += 1
-                if self.board[low_point[0]][low_point[1]]:
+                if self[low_point]:
                     return True
         return False
 
+
+    def insert_piece(self, piece, square: List[int]):
+        if self[square]:
+            return False
+        else:
+            self[square] = piece
+            return True
 
