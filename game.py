@@ -22,7 +22,7 @@ class Game:
         for i in [2,5]:
             self.board.insert_piece(pieces.Pieces("bishop", pieces.BLACK), [7,i])
         for i in [1,6]:
-            self.board.insert_piece(pieces.Pieces("bishop", pieces.BLACK), [7,i])
+            self.board.insert_piece(pieces.Pieces("knight", pieces.BLACK), [7,i])
         for i in [0,7]:
             self.board.insert_piece(pieces.Pieces("rook", pieces.BLACK), [7,i])
         for i in range(8):
