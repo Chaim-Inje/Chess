@@ -1,20 +1,18 @@
 #from typing import *
 
-
 class Board:
 
     def __init__(self):
-        self.board = [[None for i in range(8)] for j in range(8)]
-        self.black_and_white_pieces = [[],[]]
-
-        self.white_king = None
-        self.black_king = None
+        self.__board = [[None for i in range(8)] for j in range(8)]
+        self.__black_and_white_pieces = [[],[]]
+        self.__white_king = None
+        self.__black_king = None
 
     def __getitem__(self, square):
-        return self.board[square[0]][square[1]]
+        return self.__board[square[0]][square[1]]
 
     def __setitem__(self, square, value):
-        self.board[square[0]][square[1]] = value
+        self.__board[square[0]][square[1]] = value
 
     def square_content(self, square):
         return self[square]
@@ -23,13 +21,13 @@ class Board:
         if square_1[0] == square_2[0]:
             low_col, high_col = min(square_1[1], square_2[1]) + 1, max(square_1[1], square_2[1])
             while low_col < high_col:
-                if self.board[square_2[0]][low_col]:
+                if self.__board[square_2[0]][low_col]:
                     return True
                 low_col += 1
         elif square_1[1] == square_2[1]:
             low_row, high_row = min(square_1[0], square_2[0]) + 1, max(square_1[0], square_2[0])
             while low_row < high_row:
-                if self.board[low_row][square_2[1]]:
+                if self.__board[low_row][square_2[1]]:
                     return True
                 low_row += 1
         else:
@@ -45,18 +43,56 @@ class Board:
         return False
 
     def insert_piece(self, piece, square):
-        if piece.name() == "king":
-            if (piece.color() and self.white_king) or (not piece.color() and self.black_king):
-                return False
         if self[square]:
             return False
         else:
             self[square] = piece
-            self.black_and_white_pieces[piece.color()].append(square)
+            self.__black_and_white_pieces[piece.color()].append(square)
             if piece.name() == "king":
                 if piece.color():
-                    self.white_king = square
+                    self.__white_king = square
                 else:
-                    self.black_king = square
+                    self.__black_king = square
         return True
+
+    def delete_piece(self, piece, square):
+        if not self[square]:
+            return False
+        self[square] = None
+        self.__black_and_white_pieces[piece.color()].remove(square)
+        if piece.name() == 'king':
+            if piece.color():
+                self.__white_king = None
+            else:
+                self.__black_king = None
+        return True
+
+    def move_piece(self, piece, source, dest):
+        if self[dest]:
+            return False
+        else:
+            self[source] = None
+            self.__black_and_white_pieces[piece.color()].remove(source)
+            self[dest] = piece
+            self.__black_and_white_pieces[piece.color()].append(dest)
+            if piece.name() == "king":
+                if piece.color():
+                    self.__white_king = dest
+                else:
+                    self.__black_king = dest
+            return True
+
+    def black_king(self):
+        return self.__black_king
+
+    def white_king(self):
+        return self.__white_king
+
+    def black_pieces(self):
+        return self.__black_and_white_pieces[0]
+
+    def white_pieces(self):
+        return self.__black_and_white_pieces[1]
+
+
 
