@@ -39,15 +39,15 @@ class Game:
                 return False
         elif self.board[src].color() == self.board[dst].color():
             return False
-        if self.board[src] in ["queen", "rook", "bishop"]:
+        if self.board[src].name() in ["queen", "rook", "bishop"]:
             if self.board.if_blocked(src, dst):
                 return False
-        eaten: Optional[pieces.Pieces] = self.board[src]
+        eaten: Optional[pieces.Pieces] = self.board[dst]
         self.board.delete_piece(dst)
         self.board.move_piece(src, dst)
-        king_sqr = self.board.white_king() if self.board[src].color() else self.board.black_king()
+        king_sqr = self.board.white_king() if self.board[dst].color() else self.board.black_king()
         legal = True
-        if self.threatenings(king_sqr, self.board[src].color()):
+        if self.threatenings(king_sqr, self.board[dst].color()):
             legal = False
         self.board.move_piece(dst, src)
         self.board.insert_piece(eaten, dst)
@@ -63,3 +63,20 @@ class Game:
                     square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
+def move(game):
+    src = list(map(int, input().split(',')))
+    dst = list(map(int, input().split(',')))
+    if game.is_legal_move(src, dst):
+        game.board.delete_piece(dst)
+        game.board.move_piece(src,dst)
+def game():
+    game = Game()
+    while True:
+        print(game.board)
+        move(game)
+game()
+
+
+
+
+
