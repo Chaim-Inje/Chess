@@ -5,7 +5,7 @@ from typing import Optional
 
 class Game:
     def __init__(self):
-        self.player: bool = pieces.WHITE
+        self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
         self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0,4])
         self.board.insert_piece(pieces.Pieces("queen", pieces.WHITE), [0,3])

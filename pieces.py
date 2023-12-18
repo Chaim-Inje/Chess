@@ -78,6 +78,14 @@ class Pieces:
         self.__name = name
         self.__color = color
 
+    def __repr__(self):
+        piece: str = "w" if self.__color else "b"
+        if self.__name == "knight":
+            piece += "n"
+        else:
+            piece += self.__name[0]
+        return piece
+
     def color(self) -> bool:
         return self.__color
 
