@@ -1,14 +1,14 @@
-#from typing import *
-
+from typing import Optional
+import pieces
 class Board:
 
     def __init__(self):
-        self.__board = [[None for i in range(8)] for j in range(8)]
+        self.__board:list[list[Optional[pieces.Pieces]]] = [[None for i in range(8)] for j in range(8)]
         self.__black_and_white_pieces = [[],[]]
         self.__white_king = None
         self.__black_king = None
 
-    def __getitem__(self, square):
+    def __getitem__(self, square:list[int]) -> Optional[pieces.Pieces]:
         return self.__board[square[0]][square[1]]
 
     def __setitem__(self, square, value):
@@ -89,10 +89,10 @@ class Board:
         return self.__white_king
 
     def black_pieces(self):
-        return self.__black_and_white_pieces[0]
+        return self.__black_and_white_pieces[pieces.BLACK]
 
     def white_pieces(self):
-        return self.__black_and_white_pieces[1]
+        return self.__black_and_white_pieces[pieces.WHITE]
 
 
 
