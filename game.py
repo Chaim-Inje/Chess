@@ -1,5 +1,6 @@
 import board
 import pieces
+from typing import Optional
 
 
 class Game:
@@ -26,31 +27,31 @@ class Game:
             self.board.insert_piece(pieces.Pieces("rook", pieces.BLACK), [7,i])
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
+
     def is_legal_move(self, src: list[int], dst: list[int]) -> bool:
         if not self.board[src]:
             return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
                 return False
-        elif self.board[src].color != self.board[dst].color:
+        elif self.board[src].color() != self.board[dst].color():
             if dst not in self.board[src].possible_eats(src):
                 return False
-        elif self.board[src].color == self.board[dst].color:
+        elif self.board[src].color() == self.board[dst].color():
             return False
         if self.board[src] in ["queen", "rook", "bishop"]:
             if self.board.if_blocked(src, dst):
                 return False
-        eaten: str = self.board[src].name()
+        eaten: Optional[pieces.Pieces] = self.board[src]
         self.board.delete_piece(dst)
         self.board.move_piece(src, dst)
         king_sqr = self.board.white_king() if self.board[src].color() else self.board.black_king()
+        legal = True
         if self.threatenings(king_sqr, self.board[src].color()):
-            return False
-
-
-
-
-
+            legal = False
+        self.board.move_piece(dst, src)
+        self.board.insert_piece(eaten, dst)
+        return legal
 
     def threatenings(self, square: list[int], color: bool) -> list[list[int]]:
         list_of_pos_enemy = self.board.black_pieces() if color else self.board.white_pieces()
@@ -62,15 +63,3 @@ class Game:
                     square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
-
-
-
-
-
-
-
-
-
-
-
-
