@@ -9,6 +9,15 @@ class Board:
         self.__white_king:Optional[list[int]] = None
         self.__black_king:Optional[list[int]] = None
 
+    def __repr__(self):
+        my_str = ''
+        for row in self.__board:
+            for item in row:
+                my_str += '__' if not item else repr(item)
+                my_str += ' '
+            my_str += '\n\n'
+        return my_str
+
     def __getitem__(self, square:list[int]) -> Optional[pieces.Pieces]:
         return self.__board[square[0]][square[1]]
 
