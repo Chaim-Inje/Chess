@@ -37,6 +37,15 @@ class Game:
                 return False
         elif self.board[src].color == self.board[dst].color:
             return False
+        if self.board[src] in ["queen", "rook", "bishop"]:
+            if self.board.if_blocked(src, dst):
+                return False
+        eaten: str = self.board[src].name()
+        self.board.delete_piece(dst)
+        self.board.move_piece(src, dst)
+        king_sqr = self.board.white_king() if self.board[src].color() else self.board.black_king()
+        if self.threatenings(king_sqr, self.board[src].color()):
+            return False
 
 
 
