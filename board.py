@@ -6,8 +6,8 @@ class Board:
     def __init__(self):
         self.__board:list[list[Optional[pieces.Pieces]]] = [[None for i in range(8)] for j in range(8)]
         self.__black_and_white_pieces: list[list[list[int]]] = [[],[]]
-        self.__white_king:Optional[pieces.Pieces] = None
-        self.__black_king:Optional[pieces.Pieces] = None
+        self.__white_king:Optional[list[int]] = None
+        self.__black_king:Optional[list[int]] = None
 
     def __getitem__(self, square:list[int]) -> Optional[pieces.Pieces]:
         return self.__board[square[0]][square[1]]
@@ -82,10 +82,10 @@ class Board:
                     self.__black_king = dest
             return True
 
-    def black_king(self) -> Optional[pieces.Pieces]:
+    def black_king(self) -> Optional[list[int]]:
         return self.__black_king
 
-    def white_king(self) -> Optional[pieces.Pieces]:
+    def white_king(self) -> Optional[list[int]]:
         return self.__white_king
 
     def black_pieces(self) -> list[list[int]]:
