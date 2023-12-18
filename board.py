@@ -14,7 +14,7 @@ class Board:
         for row in self.__board:
             for item in row:
                 my_str += '__' if not item else repr(item)
-                my_str += ' '
+                my_str += '   '
             my_str += '\n\n'
         return my_str
 
@@ -50,7 +50,7 @@ class Board:
         return False
 
     def insert_piece(self, piece:pieces.Pieces, square:list[int]) -> bool:
-        if self[square]:
+        if self[square] or not piece:
             return False
         else:
             self[square] = piece
