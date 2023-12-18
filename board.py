@@ -4,20 +4,20 @@ class Board:
 
     def __init__(self):
         self.__board:list[list[Optional[pieces.Pieces]]] = [[None for i in range(8)] for j in range(8)]
-        self.__black_and_white_pieces = [[],[]]
-        self.__white_king = None
-        self.__black_king = None
+        self.__black_and_white_pieces: list[list[list[int]]] = [[],[]]
+        self.__white_king:Optional[pieces.Pieces] = None
+        self.__black_king:Optional[pieces.Pieces] = None
 
     def __getitem__(self, square:list[int]) -> Optional[pieces.Pieces]:
         return self.__board[square[0]][square[1]]
 
-    def __setitem__(self, square, value):
+    def __setitem__(self, square:list[int], value: Optional[pieces.Pieces]) -> None:
         self.__board[square[0]][square[1]] = value
 
-    def square_content(self, square):
+    def square_content(self, square:list[int]):
         return self[square]
 
-    def if_blocked(self, square_1, square_2):
+    def if_blocked(self, square_1: list[int], square_2:list[int]) -> bool:
         if square_1[0] == square_2[0]:
             low_col, high_col = min(square_1[1], square_2[1]) + 1, max(square_1[1], square_2[1])
             while low_col < high_col:
@@ -42,7 +42,7 @@ class Board:
                     return True
         return False
 
-    def insert_piece(self, piece, square):
+    def insert_piece(self, piece:pieces.Pieces, square:list[int]) -> bool:
         if self[square]:
             return False
         else:
@@ -55,9 +55,10 @@ class Board:
                     self.__black_king = square
         return True
 
-    def delete_piece(self, piece, square):
+    def delete_piece(self,square):
         if not self[square]:
             return False
+        piece: pieces.Pieces = self[square]
         self[square] = None
         self.__black_and_white_pieces[piece.color()].remove(square)
         if piece.name() == 'king':
