@@ -2,7 +2,6 @@ import board
 import pieces
 from typing import Optional
 
-
 class Game:
     def __init__(self):
         self.cur_player: bool = pieces.WHITE
