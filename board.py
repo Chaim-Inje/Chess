@@ -1,7 +1,8 @@
 from typing import Optional
 import pieces
-class Board:
 
+
+class Board:
     def __init__(self):
         self.__board:list[list[Optional[pieces.Pieces]]] = [[None for i in range(8)] for j in range(8)]
         self.__black_and_white_pieces: list[list[list[int]]] = [[],[]]
@@ -13,9 +14,6 @@ class Board:
 
     def __setitem__(self, square:list[int], value: Optional[pieces.Pieces]) -> None:
         self.__board[square[0]][square[1]] = value
-
-    def square_content(self, square:list[int]):
-        return self[square]
 
     def if_blocked(self, square_1: list[int], square_2:list[int]) -> bool:
         if square_1[0] == square_2[0]:
@@ -55,7 +53,7 @@ class Board:
                     self.__black_king = square
         return True
 
-    def delete_piece(self,square):
+    def delete_piece(self,square:list[int])->bool:
         if not self[square]:
             return False
         piece: pieces.Pieces = self[square]
@@ -68,10 +66,11 @@ class Board:
                 self.__black_king = None
         return True
 
-    def move_piece(self, piece, source, dest):
-        if self[dest]:
+    def move_piece(self, source:list[int], dest:list[int]) -> bool:
+        if self[dest] or not self[source]:
             return False
         else:
+            piece: pieces.Pieces = self[source]
             self[source] = None
             self.__black_and_white_pieces[piece.color()].remove(source)
             self[dest] = piece
@@ -83,16 +82,16 @@ class Board:
                     self.__black_king = dest
             return True
 
-    def black_king(self):
+    def black_king(self) -> Optional[pieces.Pieces]:
         return self.__black_king
 
-    def white_king(self):
+    def white_king(self) -> Optional[pieces.Pieces]:
         return self.__white_king
 
-    def black_pieces(self):
+    def black_pieces(self) -> list[list[int]]:
         return self.__black_and_white_pieces[pieces.BLACK]
 
-    def white_pieces(self):
+    def white_pieces(self) -> list[list[int]]:
         return self.__black_and_white_pieces[pieces.WHITE]
 
 
