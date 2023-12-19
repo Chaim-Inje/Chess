@@ -40,7 +40,7 @@ class Game:
         elif self.board[src].color() == self.board[dst].color():
             return False
         if self.board[src].name() in ["queen", "rook", "bishop"]:
-            if self.board.if_blocked([src[0], src[1]], [dst[0], dst[1]]):
+            if self.board.if_blocked(src, dst):
                 return False
         eaten: Optional[pieces.Pieces] = self.board[dst]
         self.board.delete_piece(dst)
