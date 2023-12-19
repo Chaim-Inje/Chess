@@ -26,7 +26,7 @@ class Board:
     def __setitem__(self, square:List[int], value: Optional[pieces.Pieces]) -> None:
         self.__board[square[0]][square[1]] = value
 
-    def if_blocked(self, square_1[:]: List[int], square_2[:]:List[int]) -> bool:
+    def if_blocked(self, square_1: List[int], square_2:List[int]) -> bool:
         if square_1[0] == square_2[0]:
             low_col, high_col = min(square_1[1], square_2[1]) + 1, max(square_1[1], square_2[1])
             while low_col < high_col:
@@ -40,7 +40,7 @@ class Board:
                     return True
                 low_row += 1
         else:
-            low_point, high_point = min(square_1, square_2, key=lambda square: square[0]), max(square_1, square_2, key=lambda square: square[0])
+            low_point, high_point = min(square_1, square_2, key=lambda square: square[0])[:], max(square_1, square_2, key=lambda square: square[0])[:]
             while low_point[0] < high_point[0] - 1:
                 if low_point[1] < high_point[1]:
                     low_point[1] += 1
