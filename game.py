@@ -1,5 +1,6 @@
 import board
 import pieces
+from typing import List
 from typing import Optional
 
 class Game:
@@ -27,7 +28,7 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
 
-    def is_legal_move(self, src: list[int], dst: list[int]) -> bool:
+    def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
         if not self.board[dst]:
@@ -52,7 +53,7 @@ class Game:
         self.board.insert_piece(eaten, dst)
         return legal
 
-    def threatenings(self, square: list[int], color: bool) -> list[list[int]]:
+    def threatenings(self, square: List[int], color: bool) -> List[List[int]]:
         list_of_pos_enemy = self.board.black_pieces() if color else self.board.white_pieces()
         list_of_threatenings = []
         for piece_pos in list_of_pos_enemy:
