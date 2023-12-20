@@ -75,19 +75,27 @@ class Pieces:
     funcs = {"king": king_moves, "queen": queen_moves, "rook": rook_moves,
              "bishop": bishop_moves, "knight": knight_moves}
     def __init__(self, name: str, color: bool):
-        self.name = name
-        self.color = color
+        self.__name = name
+        self.__color = color
+
+    def __repr__(self):
+        piece: str = "w" if self.__color else "b"
+        if self.__name == "knight":
+            piece += "n"
+        else:
+            piece += self.__name[0]
+        return piece
 
     def color(self) -> bool:
-        return self.color
+        return self.__color
 
     def name(self) -> str:
-        return self.name
+        return self.__name
 
     def possible_moves(self, sqr: list):
-        return pawn_moves(sqr, self.color) if self.name == "pawn" else\
-            self.funcs[self.name](sqr)
+        return pawn_moves(sqr, self.__color) if self.__name == "pawn" else\
+            self.funcs[self.__name](sqr)
 
     def possible_eats(self, sqr: list):
-        return pawn_eats(sqr, self.color) if self.name == "pawn" else\
-            self.funcs[self.name](sqr)
+        return pawn_eats(sqr, self.__color) if self.__name == "pawn" else\
+            self.funcs[self.__name](sqr)
