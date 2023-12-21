@@ -35,7 +35,8 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
-
+    def move(self, src, dst):
+        self.board.move_piece(src,dst)
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
