@@ -89,7 +89,7 @@ class Game:
                 # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
-                    self.surface.blit(piece.path_to_image(), ((col + 0.4) * square_size, (row + 0.4) * square_size))
+                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.4) * square_size, (row + 0.4) * square_size))
 
 
 def move(game):
