@@ -78,7 +78,7 @@ class Pieces:
     def __init__(self, name: str, color: bool):
         self.__name = name
         self.__color = color
-        self.__image = f"Images/{color} {name}"
+        self.__image = f"images/{color} {name}"
 
     def __repr__(self):
         piece: str = "w" if self.__color else "b"
