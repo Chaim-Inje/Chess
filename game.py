@@ -75,17 +75,20 @@ class Game:
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
             for col in range(8):
-                if [row, col] == down_square:
-                    color = darker_yellow
-                elif [row, col] == hovered_square:
-                    color = yellow
-                elif (row + col) % 2 == 0:
-                    color = white
+                if [row, col] in list_of_squares:
+
+                    pygame.draw.rect(self.surface, yellow, pygame.Rect(col * square_size, row * square_size, square_size, square_size), 5)
                 else:
-                    color = black
-                pygame.draw.rect(self.surface, color, (col * square_size, row * square_size, square_size, square_size))
-                if [row,col] in list_of_squares:
-                    pygame.draw.rect(self.surface, yellow, pygame.Rect(row*square_size, col*square_size, square_size, square_size),5)
+                    if [row, col] == down_square:
+                        color = darker_yellow
+                    elif [row, col] == hovered_square:
+                        color = yellow
+                    elif (row + col) % 2 == 0:
+                        color = white
+                    else:
+                        color = black
+                    pygame.draw.rect(self.surface, color, (col * square_size, row * square_size, square_size, square_size))
+
                 # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
@@ -126,7 +129,7 @@ def game():
                 hovered = [pos[1] // square_size, pos[0] // square_size]
 
 
-            game.draw_board(hovered, down, [[0,0]])
+            game.draw_board(hovered, down, square_list)
             pygame.display.update()
 
 
