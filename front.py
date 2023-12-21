@@ -91,6 +91,7 @@ draw_board()  # Call the function to draw the board initially
 # Update the display
 pygame.display.update()
 
+
 # Wait for the user to close the window or click on a square
 while True:
     for event in pygame.event.get():
