@@ -2,9 +2,16 @@ import board
 import pieces
 from typing import List
 from typing import Optional
+import pygame
+white = (255, 255, 255)
+black = (120, 65, 0)
+  # Add this line to define the color red
+yellow = (255, 200, 0)
+darker_yellow = (200, 150)
+square_size = 70
 
 class Game:
-    def __init__(self):
+    def __init__(self, surface):
         self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
         self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0,4])
@@ -27,6 +34,7 @@ class Game:
             self.board.insert_piece(pieces.Pieces("rook", pieces.BLACK), [7,i])
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
+        self.surface = surface
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
@@ -63,6 +71,27 @@ class Game:
                     square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
+
+    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
+        for row in range(8):
+            for col in range(8):
+                if [row, col] == hovered_square:
+                    color = yellow
+                elif [row, col] == down_square:
+                    color = darker_yellow
+                elif (row + col) % 2 == 0:
+                    color = white
+                else:
+                    color = black
+                pygame.draw.rect(self.surface, color, (col * square_size, row * square_size, square_size, square_size))
+                if [row,col] in list_of_squares:
+                    pygame.draw.rect(self.surface, yellow, pygame.Rect(row*square_size, col*square_size, square_size, square_size),5)
+                # Draw the pieces
+                piece = self.board[[row, col]]
+                if piece is not None:
+                    self.surface.blit(piece.path_to_image(), ((col + 0.4) * square_size, (row + 0.4) * square_size))
+
+
 def move(game):
     src = list(map(int, input().split(',')))
     dst = list(map(int, input().split(',')))
@@ -70,10 +99,15 @@ def move(game):
         game.board.delete_piece(dst)
         game.board.move_piece(src,dst)
 def game():
-    game = Game()
+    pygame.init()
+    board_size = (square_size * 8, square_size * 8)
+    display_surface = pygame.display.set_mode(board_size)
+    game = Game(display_surface)
     while True:
-        print(game.board)
-        move(game)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
 game()
 
 
