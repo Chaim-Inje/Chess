@@ -99,6 +99,7 @@ def move(game):
         game.board.delete_piece(dst)
         game.board.move_piece(src,dst)
 
+
 def game():
     pygame.init()
     board_size = (square_size * 8, square_size * 8)
