@@ -72,12 +72,12 @@ class Game:
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
 
-    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
+    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
             for col in range(8):
                 if [row, col] == hovered_square:
                     color = yellow
-                elif [row, col] == down_square:
+                if [row, col] == down_square:
                     color = darker_yellow
                 elif (row + col) % 2 == 0:
                     color = white
@@ -105,6 +105,9 @@ def game():
     board_size = (square_size * 8, square_size * 8)
     display_surface = pygame.display.set_mode(board_size)
     game = Game(display_surface)
+    game.draw_board()
+    pygame.display.update()
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
