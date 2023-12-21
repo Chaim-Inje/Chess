@@ -3,6 +3,7 @@ import pygame
 # Initialize Pygame
 pygame.init()
 
+
 # Set the size of each square
 square_size = 70
 
