@@ -11,13 +11,24 @@ board_size = (square_size * 8, square_size * 8)
 
 # Create the display surface
 display_surface = pygame.display.set_mode(board_size)
-my_image = pygame.image.load("C:/Users/Haim/OneDrive/תמונות/black pawn.png")
+pawn = pygame.image.load("images/black pawn resized.png")
+rook = pygame.image.load("images/black rook resized.png")
+knight = pygame.image.load("images/black knight resized.png")
+bishop = pygame.image.load("images/black bishop resized.png")
+queen = pygame.image.load("images/black queen resized.png")
+king = pygame.image.load("images/black king resized.png")
+w_pawn = pygame.image.load("images/white pawn resized.png")
+w_rook = pygame.image.load("images/white rook resized.png")
+w_knight = pygame.image.load("images/white knight resized.png")
+w_bishop = pygame.image.load("images/white bishop resized.png")
+w_queen = pygame.image.load("images/white queen resized.png")
+w_king = pygame.image.load("images/white king resized.png")
 #pygame.transform.scale(my_image, (20,20))
 # Set the colors of the board
 white = (255, 255, 255)
-black = (0, 0, 0)
-w_red = (255, 150, 150)  # Add this line to define the color red
-b_red = (150, 0, 0)
+black = (120, 65, 0)
+w_red = (255, 200, 0)  # Add this line to define the color red
+b_red = (255, 200, 0)
 board = [
     ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
     ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -35,7 +46,10 @@ def draw_board(hovered_square=None):
     for row in range(8):
         for col in range(8):
             if (row, col) == hovered_square:
-                color = b_red
+                if (row + col) % 2 == 0:
+                    color = w_red
+                else:
+                    color = b_red
             elif (row + col) % 2 == 0:
                 color = white
             else:
@@ -46,9 +60,30 @@ def draw_board(hovered_square=None):
             piece = board[row][col]
             if piece is not None:
                 # For now, just draw a circle for the pawns
-                if piece.lower() == 'p':
-                    display_surface.blit(my_image,((col+0.4)*square_size, (row+0.4)*square_size))
-
+                if piece == 'P':
+                    display_surface.blit(pawn,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'R':
+                    display_surface.blit(rook,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'N':
+                    display_surface.blit(knight,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'B':
+                    display_surface.blit(bishop,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'Q':
+                    display_surface.blit(queen,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'K':
+                    display_surface.blit(king,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'p':
+                    display_surface.blit(w_pawn,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'r':
+                    display_surface.blit(w_rook,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'n':
+                    display_surface.blit(w_knight,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'b':
+                    display_surface.blit(w_bishop,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'q':
+                    display_surface.blit(w_queen,((col+0.26)*square_size, (row+0.26)*square_size))
+                if piece == 'k':
+                    display_surface.blit(w_king,((col+0.26)*square_size, (row+0.26)*square_size))
 
 draw_board()  # Call the function to draw the board initially
 
@@ -77,5 +112,9 @@ while True:
             col = pos[0] // square_size
             # Redraw the board with the hovered square
             draw_board((row, col))
+            # Update the display
+            pygame.display.update()
+        else:
+            draw_board()
             # Update the display
             pygame.display.update()
