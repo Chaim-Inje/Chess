@@ -72,6 +72,11 @@ class Game:
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
 
+    def possible_moves(self, square):
+        if self.board[square] is None:
+            return []
+        else:
+            return [s for s in self.board[square].possible_moves(square) if self.is_legal_move(square,s)]
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
             for col in range(8):
