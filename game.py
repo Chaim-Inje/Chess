@@ -7,7 +7,7 @@ white = (255, 255, 255)
 black = (120, 65, 0)
   # Add this line to define the color red
 yellow = (255, 200, 0)
-darker_yellow = (200, 150)
+darker_yellow = (200, 150,0)
 square_size = 70
 
 class Game:
@@ -75,10 +75,10 @@ class Game:
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
             for col in range(8):
-                if [row, col] == hovered_square:
-                    color = yellow
                 if [row, col] == down_square:
                     color = darker_yellow
+                elif [row, col] == hovered_square:
+                    color = yellow
                 elif (row + col) % 2 == 0:
                     color = white
                 else:
@@ -89,7 +89,7 @@ class Game:
                 # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
-                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.4) * square_size, (row + 0.4) * square_size))
+                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size, (row + 0.26) * square_size))
 
 
 def move(game):
@@ -107,12 +107,29 @@ def game():
     game = Game(display_surface)
     game.draw_board()
     pygame.display.update()
-
+    hovered = None
+    down = None
+    square_list = []
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Get the position of the mouse click
+                pos = pygame.mouse.get_pos()
+                # Calculate the row and column of the clicked square
+                down = [pos[1] // square_size,pos[0] // square_size]
+            elif event.type == pygame.MOUSEMOTION:
+                pos = pygame.mouse.get_pos()
+                # Calculate the row and column of the clicked square
+                hovered = [pos[1] // square_size, pos[0] // square_size]
+
+
+            game.draw_board(hovered, down, [[0,0]])
+            pygame.display.update()
+
+
 game()
 
 
