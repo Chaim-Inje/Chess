@@ -38,10 +38,21 @@ class Game:
         self.pawn_eat = []
 
     def move(self, src, dst):
+        if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
+            self.board.delete_piece()
         if self.board[dst]:
             self.board.delete_piece(dst)
+
+
         self.board.move_piece(src,dst)
         self.cur_player = not self.cur_player
+        self.pawn_eat = []
+        if abs(src[0] - dst[0]) == 2 and self.board[src].name() == 'pawn':
+            if dst[1] - 1 >= 0:
+                self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0]-1,dst[1]], dst))
+            if dst[1] + 1 <= 7:
+                self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0]-1, dst[1]], dst))
+
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
@@ -85,8 +96,8 @@ class Game:
             return []
         else:
             my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
-            if self.pawn_eat and self.board[square] == self.pawn_eat[0]:
-                my_list.append(self.pawn_eat[1])
+            if self.pawn_eat and (self.board[square] == self.pawn_eat[0][0] or self.board[square] == self.pawn_eat[1][0]):
+                my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
             return my_list
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
