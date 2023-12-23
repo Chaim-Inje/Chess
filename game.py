@@ -41,7 +41,7 @@ class Game:
 
     def move(self, src, dst):
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
-            self.board.delete_piece()
+            self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src,dst) else self.pawn_eat[1][2])
         if self.board[dst]:
             self.board.delete_piece(dst)
         if src in self.castling:
@@ -61,15 +61,13 @@ class Game:
         if self.board[src].name() == "king" and src[1] == dst[1]-2:
             self.board.move_piece([[src[0]], 0], [[src[0]], 3])
         self.board.move_piece(src, dst)
-
-
         self.cur_player = not self.cur_player
         self.pawn_eat = []
-        if abs(src[0] - dst[0]) == 2 and self.board[src].name() == 'pawn':
+        if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
             if dst[1] - 1 >= 0:
-                self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0]-1,dst[1]], dst))
+                self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0] + (1 if not self.board[dst].color() else -1),dst[1]], dst))
             if dst[1] + 1 <= 7:
-                self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0]-1, dst[1]], dst))
+                self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
 
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
@@ -113,9 +111,9 @@ class Game:
         if self.board[square] is None:
             return []
         my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
-        if self.pawn_eat and self.board[square].name() == 'pawn' and (self.board[square] == self.pawn_eat[0][0] or self.board[square] == self.pawn_eat[1][0]):
+        if self.pawn_eat and self.board[square].name() == 'pawn' and (square == self.pawn_eat[0][0] or square == self.pawn_eat[1][0]):
             my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
-        if square in [[0,4], [7,4]] and self.board[square].name() == "king":
+        #if square in [[0,4], [7,4]] and self.board[square].name() == "king":
 
         return my_list
 
