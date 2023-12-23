@@ -151,10 +151,20 @@ class Game:
                 if piece is not None:
                     self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size, (row + 0.26) * square_size))
 
+    def stalemate(self, color:bool) -> bool:
+        for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
+            if self.possible_moves(piece):
+                break
+        else:
+            return True
+        return False
+
+    def checkmate(self, color: bool) -> bool:
+        return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
+
     @staticmethod
-    def event_manager(hovered):
-        if not pygame.mouse.get_focused():
-            hovered = None
+    def event_manager():
+        hovered = None
         down = None
         event = pygame.event.poll()
         if not pygame.mouse.get_focused():
@@ -166,7 +176,7 @@ class Game:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             down = [pos[1] // square_size, pos[0] // square_size]
-        if event.type == pygame.MOUSEMOTION:
+        if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             hovered = [pos[1] // square_size, pos[0] // square_size]
@@ -176,12 +186,12 @@ class Game:
         square_list = []
         hovered = None
         while True:
-            down, hovered = self.event_manager(hovered)
+            down, hovered = self.event_manager()
             while down:
                 square_list = self.possible_moves(down)
                 new_down = None
                 while not new_down:
-                    new_down, hovered = self.event_manager(hovered)
+                    new_down, hovered = self.event_manager()
                     self.draw_board(hovered, down, square_list)
                     pygame.display.update()
                 if new_down in [down] + square_list:
@@ -201,7 +211,6 @@ def main():
     pygame.init()
     pygame.event.set_blocked(None)
     pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
-    pygame.event.set_allowed(pygame.MOUSEMOTION)
     pygame.event.set_allowed(pygame.QUIT)
     board_size = (square_size * 8, square_size * 8)
     display_surface = pygame.display.set_mode(board_size)
