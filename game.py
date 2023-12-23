@@ -211,6 +211,20 @@ class Game:
             pygame.display.update()
 
 
+def str_to_sqrs(my_str: str):
+    src_row = int(my_str[1]) - 1
+    src_col = ord(my_str[0]) - 97
+    dst_row = int(my_str[3]) - 1
+    dst_col = ord(my_str[2]) - 97
+    return [[src_row, src_col], [dst_row, dst_col]]
+
+
+def sqrs_to_str(src: List[int], dst: List[int]):
+    src_row = str(src[0]+1)
+    src_col = chr(97+src[1])
+    dst_row = str(dst[0]+1)
+    dst_col = chr(97+src[1])
+    return src_col+src_row+dst_col+dst_row
 
 
 def main():
