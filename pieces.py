@@ -78,6 +78,7 @@ class Pieces:
     funcs = {"king": king_moves, "queen": queen_moves, "rook": rook_moves,
              "bishop": bishop_moves, "knight": knight_moves}
 
+
     def __init__(self, name: str, color: bool):
         self.__name = name
         self.__color = color
