@@ -64,10 +64,12 @@ class Game:
         if self.board[src].name() == "king" and src[1] == dst[1]+2:
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
+        promotion_piece_for_stockfish = ''
         if self.board[dst].name() == 'pawn' and (dst[0]== 0 or dst[0] ==7):
             my_boy = self.promotion(self.board[dst].color())
             self.board.delete_piece(dst)
             self.board.insert_piece(my_boy,dst)
+            promotion_piece_for_stockfish = my_boy.name()[0]
         self.cur_player = not self.cur_player
         self.pawn_eat = []
         if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
@@ -75,7 +77,7 @@ class Game:
                 self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0] + (1 if not self.board[dst].color() else -1),dst[1]], dst))
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
-        self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)])
+        self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)+promotion_piece_for_stockfish])
 
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
@@ -119,9 +121,9 @@ class Game:
         if self.board[square] is None:
             return []
         my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
-        if self.pawn_eat and self.board[square].name() == 'pawn' and (square == self.pawn_eat[0][0] or square == self.pawn_eat[1][0]):
-            my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
-        if square in [[0,4], [7,4]] and self.board[square].name() == "king":
+        if (self.pawn_eat and self.board[square].name() == 'pawn') and (square == self.pawn_eat[0][0] or (len(self.pawn_eat) > 1 and square == self.pawn_eat[1][0])):
+            my_list.append(self.pawn_eat[0][1] if square == self.pawn_eat[0][0] else self.pawn_eat[1][1])
+        if square in [[0,4], [7,4]] and self.board[square].name() == "king" and self.board[square].color() == self.cur_player:
             if [square[0], 0] in self.castling:
                 if not self.board.if_blocked(square, [square[0], 0]):
                     for i in range(3):
@@ -163,9 +165,8 @@ class Game:
         for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
             if self.possible_moves(piece):
                 break
-
         else:
-            return True
+            return self.cur_player == color
         return False
 
     def checkmate(self, color: bool) -> bool:
@@ -244,7 +245,7 @@ def main():
     pygame.event.set_allowed(pygame.QUIT)
     board_size = (square_size * 8, square_size * 8)
     display_surface = pygame.display.set_mode(board_size)
-    game = Game(display_surface)
+    game = Game(display_surface,False)
     game.draw_board()
     pygame.display.update()
     game.game_manager()
