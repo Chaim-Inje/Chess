@@ -112,11 +112,12 @@ class Game:
     def possible_moves(self, square):
         if self.board[square] is None:
             return []
-        else:
-            my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
-            if self.pawn_eat and (self.board[square] == self.pawn_eat[0][0] or self.board[square] == self.pawn_eat[1][0]):
-                my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
-            return my_list
+        my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
+        if self.pawn_eat and self.board[square].name() == 'pawn' and (self.board[square] == self.pawn_eat[0][0] or self.board[square] == self.pawn_eat[1][0]):
+            my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
+        if square in [[0,4], [7,4]] and self.board[square].name() == "king":
+
+        return my_list
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
