@@ -56,9 +56,9 @@ class Game:
                 self.castling.remove([7,0])
             if [7,7] in self.castling:
                 self.castling.remove([7,7])
-        if self.board[src].name() == "king" and src[1] == dst[1]+2:
-            self.board.move_piece([src[0], 7], [src[0], 5])
         if self.board[src].name() == "king" and src[1] == dst[1]-2:
+            self.board.move_piece([src[0], 7], [src[0], 5])
+        if self.board[src].name() == "king" and src[1] == dst[1]+2:
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
         self.cur_player = not self.cur_player
@@ -73,8 +73,8 @@ class Game:
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
-        if self.board[src].color() != self.cur_player:
-            return False
+        # if self.board[src].color() != self.cur_player:
+        #     return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
                 return False
