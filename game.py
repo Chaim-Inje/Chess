@@ -223,7 +223,7 @@ def sqrs_to_str(src: List[int], dst: List[int]):
     src_row = str(src[0]+1)
     src_col = chr(97+src[1])
     dst_row = str(dst[0]+1)
-    dst_col = chr(97+src[1])
+    dst_col = chr(97+dst[1])
     return src_col+src_row+dst_col+dst_row
 
 
@@ -286,10 +286,8 @@ def main():
         #     game.draw_board(hovered, down, square_list)
         #     pygame.display.update()
 
+print(str_to_sqrs("a2a3"))
+print(sqrs_to_str([0,0],[0,3]))
 
-main()
-
-
-
-
+# main()
 
