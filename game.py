@@ -12,7 +12,7 @@ square_size = 70
 
 class Game:
     def __init__(self, surface):
-        #self.cur_player: bool = pieces.WHITE
+        self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
         self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0,4])
         self.board.insert_piece(pieces.Pieces("queen", pieces.WHITE), [0,3])
@@ -35,12 +35,18 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
+        self.castling = {[0,4]:[0,2], [0,0]:[0,]}
+
     def move(self, src, dst):
         if self.board[dst]:
             self.board.delete_piece(dst)
         self.board.move_piece(src,dst)
+        self.cur_player = not self.cur_player
+
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
+            return False
+        if self.board[src].color() != self.cur_player:
             return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
@@ -50,7 +56,7 @@ class Game:
                 return False
         elif self.board[src].color() == self.board[dst].color():
             return False
-        if self.board[src].name() in ["queen", "rook", "bishop"]:
+        if self.board[src].name() in ["queen", "rook", "bishop", 'pawn']:
             if self.board.if_blocked(src, dst):
                 return False
         eaten: Optional[pieces.Pieces] = self.board[dst]
@@ -69,8 +75,7 @@ class Game:
         list_of_threatenings = []
         for piece_pos in list_of_pos_enemy:
             if square in self.board[piece_pos].possible_eats(piece_pos) and (
-                    self.board[piece_pos].name() in ['king', 'pawn',
-                                                     'knight'] or not self.board.if_blocked(
+                    self.board[piece_pos].name() in ['king', 'knight'] or not self.board.if_blocked(
                     square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
@@ -79,7 +84,7 @@ class Game:
         if self.board[square] is None:
             return []
         else:
-            return [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s) ]
+            return [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
@@ -104,6 +109,8 @@ class Game:
 
     @staticmethod
     def event_manager(hovered):
+        if not pygame.mouse.get_focused():
+            hovered = None
         down = None
         event = pygame.event.poll()
         if not pygame.mouse.get_focused():
