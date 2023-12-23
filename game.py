@@ -73,8 +73,8 @@ class Game:
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
-        # if self.board[src].color() != self.cur_player:
-        #     return False
+        if self.board[src].color() != self.cur_player:
+            return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
                 return False
