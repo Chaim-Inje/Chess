@@ -113,6 +113,8 @@ class Game:
             hovered = None
         down = None
         event = pygame.event.poll()
+        if not pygame.mouse.get_focused():
+            hovered = None
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
