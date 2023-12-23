@@ -4,6 +4,7 @@ from typing import List
 from typing import Optional
 import pygame
 from stockfish import Stockfish
+from time import sleep
 white = (255, 255, 255)
 black = (120, 65, 0)
   # Add this line to define the color red
@@ -12,7 +13,7 @@ darker_yellow = (200, 150,0)
 square_size = 70
 
 class Game:
-    def __init__(self, surface):
+    def __init__(self, surface, two_players = False):
         self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
         self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0,4])
@@ -38,9 +39,13 @@ class Game:
         self.surface = surface
         self.castling = [[0,0], [0,7], [7,0], [7,7]]
         self.pawn_eat = []
-        self.stockfish = Stockfish(path="C:/Users/Haim/Downloads/stockfish/stockfish-windows-x86-64-avx2.exe")
+        self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
+        self.two_players = two_players
 
     def move(self, src, dst):
+        if self.cur_player == pieces.BLACK and not self.two_players:
+            pygame.display.update()
+            sleep(1)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src,dst) else self.pawn_eat[1][2])
         if self.board[dst]:
@@ -74,7 +79,7 @@ class Game:
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
         self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)])
-        if self.cur_player == pieces.BLACK:
+        if self.cur_player == pieces.BLACK and not self.two_players:
             best_move = self.stockfish.get_best_move()
             self.move(*str_to_sqrs(best_move))
 
