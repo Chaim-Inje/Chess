@@ -57,9 +57,9 @@ class Game:
             if [7,7] in self.castling:
                 self.castling.remove([7,7])
         if self.board[src].name() == "king" and src[1] == dst[1]+2:
-            self.board.move_piece([[src[0]], 7], [[src[0]], 5])
+            self.board.move_piece([src[0], 7], [src[0], 5])
         if self.board[src].name() == "king" and src[1] == dst[1]-2:
-            self.board.move_piece([[src[0]], 0], [[src[0]], 3])
+            self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
         self.cur_player = not self.cur_player
         self.pawn_eat = []
@@ -113,8 +113,21 @@ class Game:
         my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
         if self.pawn_eat and self.board[square].name() == 'pawn' and (square == self.pawn_eat[0][0] or square == self.pawn_eat[1][0]):
             my_list.append(self.pawn_eat[0][1] if self.board[square] == self.pawn_eat[0][0] else self.pawn_eat[1][1])
-        #if square in [[0,4], [7,4]] and self.board[square].name() == "king":
-
+        if square in [[0,4], [7,4]] and self.board[square].name() == "king":
+            if [square[0], 0] in self.castling:
+                if not self.board.if_blocked(square, [square[0], 0]):
+                    for i in range(3):
+                        if self.threatenings([square[0], 4-i], self.board[square].color()):
+                            break
+                    else:
+                        my_list.append([square[0], 2])
+            if [square[0], 7] in self.castling:
+                if not self.board.if_blocked(square, [square[0], 7]):
+                    for i in range(3):
+                        if self.threatenings([square[0], 4+i], self.board[square].color()):
+                            break
+                    else:
+                        my_list.append([square[0], 6])
         return my_list
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
