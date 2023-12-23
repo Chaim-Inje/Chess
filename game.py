@@ -35,6 +35,8 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
+        self.castling = [[0,0], [0,7], [7,0], [7,7]]
+
         self.pawn_eat = []
 
     def move(self, src, dst):
@@ -42,9 +44,25 @@ class Game:
             self.board.delete_piece()
         if self.board[dst]:
             self.board.delete_piece(dst)
+        if src in self.castling:
+            self.castling.remove(src)
+        elif src == [0,4]:
+            if [0,0] in self.castling:
+                self.castling.remove([0,0])
+            if [0,7] in self.castling:
+                self.castling.remove([0,7])
+        elif src == [7,4]:
+            if [7,0] in self.castling:
+                self.castling.remove([7,0])
+            if [7,7] in self.castling:
+                self.castling.remove([7,7])
+        if self.board[src].name() == "king" and src[1] == dst[1]+2:
+            self.board.move_piece([[src[0]], 7], [[src[0]], 5])
+        if self.board[src].name() == "king" and src[1] == dst[1]-2:
+            self.board.move_piece([[src[0]], 0], [[src[0]], 3])
+        self.board.move_piece(src, dst)
 
 
-        self.board.move_piece(src,dst)
         self.cur_player = not self.cur_player
         self.pawn_eat = []
         if abs(src[0] - dst[0]) == 2 and self.board[src].name() == 'pawn':
