@@ -61,6 +61,10 @@ class Game:
         if self.board[src].name() == "king" and src[1] == dst[1]+2:
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
+        if self.board[dst].name() == 'pawn' and (dst[0]== 0 or dst[0] ==7):
+            my_boy = self.promotion(self.board[dst].color())
+            self.board.delete_piece(dst)
+            self.board.insert_piece(my_boy,dst)
         self.cur_player = not self.cur_player
         self.pawn_eat = []
         if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
@@ -73,8 +77,8 @@ class Game:
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
-        if self.board[src].color() != self.cur_player:
-            return False
+        # if self.board[src].color() != self.cur_player:
+        #     return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
                 return False
@@ -161,6 +165,8 @@ class Game:
 
     def checkmate(self, color: bool) -> bool:
         return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
+    def promotion(self, color: bool) -> pieces.Pieces:
+        return pieces.Pieces('queen', color)
 
     @staticmethod
     def event_manager():
