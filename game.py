@@ -43,9 +43,6 @@ class Game:
         self.two_players = two_players
 
     def move(self, src, dst):
-        if self.cur_player == pieces.BLACK and not self.two_players:
-            pygame.display.update()
-            sleep(1)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src,dst) else self.pawn_eat[1][2])
         if self.board[dst]:
@@ -79,9 +76,6 @@ class Game:
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
         self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)])
-        if self.cur_player == pieces.BLACK and not self.two_players:
-            best_move = self.stockfish.get_best_move()
-            self.move(*str_to_sqrs(best_move))
 
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
@@ -201,7 +195,6 @@ class Game:
 
     def game_manager(self):
         square_list = []
-        hovered = None
         while True:
             down, hovered = self.event_manager()
             while down:
@@ -214,6 +207,12 @@ class Game:
                 if new_down in [down] + square_list:
                     if new_down != down:
                         self.move(down, new_down)
+                        if self.cur_player == pieces.BLACK and not self.two_players:
+                            self.draw_board(hovered)
+                            pygame.display.update()
+                            sleep(1)
+                            best_move = self.stockfish.get_best_move()
+                            self.move(*str_to_sqrs(best_move))
                     down = None
                     square_list = []
                 else:
