@@ -35,6 +35,7 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
+        self.castling = {[0,4]:[0,2], [0,0]:[0,]}
 
     def move(self, src, dst):
         if self.board[dst]:
@@ -55,7 +56,7 @@ class Game:
                 return False
         elif self.board[src].color() == self.board[dst].color():
             return False
-        if self.board[src].name() in ["queen", "rook", "bishop"]:
+        if self.board[src].name() in ["queen", "rook", "bishop", 'pawn']:
             if self.board.if_blocked(src, dst):
                 return False
         eaten: Optional[pieces.Pieces] = self.board[dst]
@@ -74,8 +75,7 @@ class Game:
         list_of_threatenings = []
         for piece_pos in list_of_pos_enemy:
             if square in self.board[piece_pos].possible_eats(piece_pos) and (
-                    self.board[piece_pos].name() in ['king', 'pawn',
-                                                     'knight'] or not self.board.if_blocked(
+                    self.board[piece_pos].name() in ['king', 'knight'] or not self.board.if_blocked(
                     square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
