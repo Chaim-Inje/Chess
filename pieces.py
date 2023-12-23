@@ -58,8 +58,11 @@ def knight_moves(sqr: list):
 
 
 def pawn_moves(sqr: list, color: int):
-    move = [sqr[0]+1, sqr[1]] if color else [sqr[0]-1, sqr[1]]
-    return [move] if valid_square(move) else []
+    moves = [[sqr[0]+1, sqr[1]] if color else [sqr[0]-1, sqr[1]]]
+    if (color and sqr[0] == 1) or ((not color) and sqr[0] == 6):
+        skip = [3, sqr[1]] if color else [4, sqr[1]]
+        moves.append(skip)
+    return moves if valid_square(moves[0]) else []
 
 
 def pawn_eats(sqr: list, color: int):
