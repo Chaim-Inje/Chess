@@ -35,7 +35,7 @@ class Game:
         for i in range(8):
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
-        self.castling = {[0,4]:[0,2], [0,0]:[0,]}
+        self.pawn_eat = []
 
     def move(self, src, dst):
         if self.board[dst]:
@@ -84,7 +84,10 @@ class Game:
         if self.board[square] is None:
             return []
         else:
-            return [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
+            my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
+            if self.pawn_eat and self.board[square] == self.pawn_eat[0]:
+                my_list.append(self.pawn_eat[1])
+            return my_list
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
         for row in range(8):
