@@ -169,6 +169,7 @@ class Game:
         for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
             if self.possible_moves(piece):
                 break
+
         else:
             return True
         return False
@@ -250,51 +251,6 @@ def main():
     game.game_manager()
 
 
-        # hovered = None
-        # for event in pygame.event.get():
-        #     if event.type == pygame.QUIT:
-        #         pygame.quit()
-        #         quit()
-        #     if event.type == pygame.MOUSEBUTTONDOWN:
-        #         # Get the position of the mouse click
-        #         pos = pygame.mouse.get_pos()
-        #         # Calculate the row and column of the clicked square
-        #         down = [pos[1] // square_size,pos[0] // square_size]
-        #         brk = True
-        #         while brk:
-        #             square_list = game.possible_moves(down)
-        #             for event in pygame.event.get():
-        #                 if event.type == pygame.QUIT:
-        #                     pygame.quit()
-        #                     quit()
-        #                 if event.type == pygame.MOUSEMOTION:
-        #                     pos = pygame.mouse.get_pos()
-        #                     # Calculate the row and column of the clicked square
-        #                     hovered = [pos[1] // square_size,
-        #                                pos[0] // square_size]
-        #                 if event.type == pygame.MOUSEBUTTONDOWN:
-        #                     pos = pygame.mouse.get_pos()
-        #                     pos = [pos[1]//square_size, pos[0]//square_size]
-        #                     if pos in square_list + [down]:
-        #                         if down != pos:
-        #                             game.move(down, pos)
-        #                         down = None
-        #                         square_list = []
-        #                         brk = False
-        #                     else:
-        #                         down = pos
-        #                         square_list =[]
-        #                     break
-        #                 game.draw_board(hovered, down, square_list)
-        #                 pygame.display.update()
-        #     elif event.type == pygame.MOUSEMOTION:
-        #         pos = pygame.mouse.get_pos()
-        #         # Calculate the row and column of the clicked square
-        #         hovered = [pos[1] // square_size, pos[0] // square_size]
-        #
-        #
-        #     game.draw_board(hovered, down, square_list)
-        #     pygame.display.update()
 
 
 
