@@ -3,6 +3,7 @@ import pieces
 from typing import List
 from typing import Optional
 import pygame
+from stockfish import Stockfish
 white = (255, 255, 255)
 black = (120, 65, 0)
   # Add this line to define the color red
@@ -36,8 +37,8 @@ class Game:
             self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
         self.surface = surface
         self.castling = [[0,0], [0,7], [7,0], [7,7]]
-
         self.pawn_eat = []
+        self.stockfish = Stockfish(path="C:/Users/Haim/Downloads/stockfish/stockfish-windows-x86-64-avx2.exe")
 
     def move(self, src, dst):
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
@@ -72,13 +73,17 @@ class Game:
                 self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0] + (1 if not self.board[dst].color() else -1),dst[1]], dst))
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
+        self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)])
+        if self.cur_player == pieces.BLACK:
+            best_move = self.stockfish.get_best_move()
+            self.move(*str_to_sqrs(best_move))
 
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
             return False
-        # if self.board[src].color() != self.cur_player:
-        #     return False
+        if self.board[src].color() != self.cur_player:
+            return False
         if not self.board[dst]:
             if dst not in self.board[src].possible_moves(src):
                 return False
@@ -142,7 +147,7 @@ class Game:
                     color = darker_yellow
                 elif [row, col] == hovered_square:
                     color = yellow
-                elif (row + col) % 2 == 0:
+                elif (row + col) % 2 == 1:
                     color = white
                 else:
                     color = black
@@ -286,8 +291,7 @@ def main():
         #     game.draw_board(hovered, down, square_list)
         #     pygame.display.update()
 
-print(str_to_sqrs("a2a3"))
-print(sqrs_to_str([0,0],[0,3]))
 
-# main()
+
+main()
 
