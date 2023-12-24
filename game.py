@@ -5,7 +5,7 @@ from typing import Optional
 import pygame
 from stockfish import Stockfish
 from time import sleep
-
+import front
 
 
 class Game:
@@ -37,9 +37,10 @@ class Game:
         self.pawn_eat = []
         self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
         self.two_players = two_players
+        self.front = front.Front(surface, self.board)
 
     def move(self, src, dst):
-        self.draw_movement(dst, src)
+        self.front.draw_movement(dst, src)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] == (src, dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src, dst) else self.pawn_eat[1][2])
         if self.board[dst]:
@@ -57,10 +58,10 @@ class Game:
             if [7, 7] in self.castling:
                 self.castling.remove([7, 7])
         if self.board[src].name() == "king" and src[1] == dst[1] - 2:
-            self.draw_movement([src[0], 5], [src[0], 7])
+            self.front.draw_movement([src[0], 5], [src[0], 7])
             self.board.move_piece([src[0], 7], [src[0], 5])
         if self.board[src].name() == "king" and src[1] == dst[1] + 2:
-            self.draw_movement([src[0], 3], [src[0], 0])
+            self.front.draw_movement([src[0], 3], [src[0], 0])
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
         promotion_piece_for_stockfish = ''
@@ -77,7 +78,6 @@ class Game:
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1] + 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
         self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion_piece_for_stockfish])
-
 
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
@@ -160,19 +160,19 @@ class Game:
     def game_manager(self):
         square_list = []
         while True:
-            down, hovered = self.event_manager()
+            down, hovered = self.front.event_manager()
             while down:
                 square_list = self.possible_moves(down)
                 new_down = None
                 while not new_down:
-                    new_down, hovered = self.event_manager()
-                    self.draw_board(hovered, down, square_list)
+                    new_down, hovered = self.front.event_manager()
+                    self.front.draw_board(hovered, down, square_list)
                     pygame.display.update()
                 if new_down in [down] + square_list:
                     if new_down != down:
                         self.move(down, new_down)
                         if self.cur_player == pieces.BLACK and not self.two_players:
-                            self.draw_board(hovered)
+                            self.front.draw_board(hovered)
                             pygame.display.update()
                             sleep(1)
                             best_move = self.stockfish.get_best_move()
@@ -181,7 +181,7 @@ class Game:
                     square_list = []
                 else:
                     down = new_down
-            self.draw_board(hovered, down, square_list)
+            self.front.draw_board(hovered, down, square_list)
             pygame.display.update()
 
 
@@ -198,10 +198,10 @@ def main():
     pygame.event.set_blocked(None)
     pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
     pygame.event.set_allowed(pygame.QUIT)
-    board_size = (square_size * 8 + RIGHT_BAR + LEFT_BAR, square_size * 8 + UP_BAR + DOWN_BAR)
+    board_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
     display_surface = pygame.display.set_mode(board_size)
     game = Game(display_surface, False)
-    game.draw_board()
+    game.front.draw_board()
     pygame.display.update()
     game.game_manager()
 
