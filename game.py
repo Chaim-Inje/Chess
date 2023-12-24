@@ -60,7 +60,6 @@ class Game:
                 self.castling.remove([7,0])
             if [7,7] in self.castling:
                 self.castling.remove([7,7])
-        piece = self.board[src]
         if self.board[src].name() == "king" and src[1] == dst[1]-2:
             self.draw_movement([src[0], 5], [src[0], 7])
             self.board.move_piece([src[0], 7], [src[0], 5])
@@ -89,13 +88,13 @@ class Game:
         stop_col, stop_row = (dst[1] + 0.26) * square_size, (
                     dst[0] + 0.26) * square_size
         phase_col, phase_row = (stop_col - start_col) / 90, (
-                    start_row - stop_row) / 90
+                    stop_row - start_row) / 90
         piece = self.board[src]
         self.board.delete_piece(src)
         for i in range(90):
             self.surface.blit(pygame.image.load(piece.path_to_image()), (
             (src[1] + 0.26) * square_size + phase_col * i,
-            (7-src[0] + 0.26) * square_size + phase_row * i))
+            (7-src[0] + 0.26) * square_size - phase_row * i))
             pygame.display.update()
             self.draw_board()
         self.board.insert_piece(piece, src)
