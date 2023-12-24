@@ -5,103 +5,80 @@ from typing import Optional
 import pygame
 from stockfish import Stockfish
 from time import sleep
-white = (255, 255, 255)
-black = (120, 65, 0)
-yellow = (255, 200, 0)
-darker_yellow = (200, 150,0)
-square_size = 70
-LEFT_BAR = 0
-UP_BAR = 0
-RIGHT_BAR = 0
-DOWN_BAR = 0
+
 
 
 class Game:
-    def __init__(self, surface, two_players = False):
+    def __init__(self, surface, two_players=False):
         self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
-        self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0,4])
-        self.board.insert_piece(pieces.Pieces("queen", pieces.WHITE), [0,3])
-        for i in [2,5]:
-            self.board.insert_piece(pieces.Pieces("bishop", pieces.WHITE), [0,i])
-        for i in [1,6]:
-            self.board.insert_piece(pieces.Pieces("knight", pieces.WHITE), [0,i])
-        for i in [0,7]:
-            self.board.insert_piece(pieces.Pieces("rook", pieces.WHITE), [0,i])
+        self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0, 4])
+        self.board.insert_piece(pieces.Pieces("queen", pieces.WHITE), [0, 3])
+        for i in [2, 5]:
+            self.board.insert_piece(pieces.Pieces("bishop", pieces.WHITE), [0, i])
+        for i in [1, 6]:
+            self.board.insert_piece(pieces.Pieces("knight", pieces.WHITE), [0, i])
+        for i in [0, 7]:
+            self.board.insert_piece(pieces.Pieces("rook", pieces.WHITE), [0, i])
         for i in range(8):
-            self.board.insert_piece(pieces.Pieces("pawn", pieces.WHITE),  [1,i])
-        self.board.insert_piece(pieces.Pieces("king", pieces.BLACK), [7,4])
-        self.board.insert_piece(pieces.Pieces("queen", pieces.BLACK), [7,3])
-        for i in [2,5]:
-            self.board.insert_piece(pieces.Pieces("bishop", pieces.BLACK), [7,i])
-        for i in [1,6]:
-            self.board.insert_piece(pieces.Pieces("knight", pieces.BLACK), [7,i])
-        for i in [0,7]:
-            self.board.insert_piece(pieces.Pieces("rook", pieces.BLACK), [7,i])
+            self.board.insert_piece(pieces.Pieces("pawn", pieces.WHITE), [1, i])
+        self.board.insert_piece(pieces.Pieces("king", pieces.BLACK), [7, 4])
+        self.board.insert_piece(pieces.Pieces("queen", pieces.BLACK), [7, 3])
+        for i in [2, 5]:
+            self.board.insert_piece(pieces.Pieces("bishop", pieces.BLACK), [7, i])
+        for i in [1, 6]:
+            self.board.insert_piece(pieces.Pieces("knight", pieces.BLACK), [7, i])
+        for i in [0, 7]:
+            self.board.insert_piece(pieces.Pieces("rook", pieces.BLACK), [7, i])
         for i in range(8):
-            self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK),  [6,i])
+            self.board.insert_piece(pieces.Pieces("pawn", pieces.BLACK), [6, i])
         self.surface = surface
-        self.castling = [[0,0], [0,7], [7,0], [7,7]]
+        self.castling = [[0, 0], [0, 7], [7, 0], [7, 7]]
         self.pawn_eat = []
         self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
         self.two_players = two_players
 
     def move(self, src, dst):
         self.draw_movement(dst, src)
-        if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
-            self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src,dst) else self.pawn_eat[1][2])
+        if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] == (src, dst)):
+            self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src, dst) else self.pawn_eat[1][2])
         if self.board[dst]:
             self.board.delete_piece(dst)
         if src in self.castling:
             self.castling.remove(src)
-        elif src == [0,4]:
-            if [0,0] in self.castling:
-                self.castling.remove([0,0])
-            if [0,7] in self.castling:
-                self.castling.remove([0,7])
-        elif src == [7,4]:
-            if [7,0] in self.castling:
-                self.castling.remove([7,0])
-            if [7,7] in self.castling:
-                self.castling.remove([7,7])
-        if self.board[src].name() == "king" and src[1] == dst[1]-2:
+        elif src == [0, 4]:
+            if [0, 0] in self.castling:
+                self.castling.remove([0, 0])
+            if [0, 7] in self.castling:
+                self.castling.remove([0, 7])
+        elif src == [7, 4]:
+            if [7, 0] in self.castling:
+                self.castling.remove([7, 0])
+            if [7, 7] in self.castling:
+                self.castling.remove([7, 7])
+        if self.board[src].name() == "king" and src[1] == dst[1] - 2:
             self.draw_movement([src[0], 5], [src[0], 7])
             self.board.move_piece([src[0], 7], [src[0], 5])
-        if self.board[src].name() == "king" and src[1] == dst[1]+2:
+        if self.board[src].name() == "king" and src[1] == dst[1] + 2:
             self.draw_movement([src[0], 3], [src[0], 0])
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
         promotion_piece_for_stockfish = ''
-        if self.board[dst].name() == 'pawn' and (dst[0] == 0 or dst[0] ==7):
+        if self.board[dst].name() == 'pawn' and (dst[0] == 0 or dst[0] == 7):
             my_boy = self.promotion(self.board[dst].color())
             self.board.delete_piece(dst)
-            self.board.insert_piece(my_boy,dst)
+            self.board.insert_piece(my_boy, dst)
             promotion_piece_for_stockfish = my_boy.name()[0]
         self.cur_player = not self.cur_player
         self.pawn_eat = []
         if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
             if dst[1] - 1 >= 0:
-                self.pawn_eat.append(([dst[0], dst[1]-1], [dst[0] + (1 if not self.board[dst].color() else -1),dst[1]], dst))
+                self.pawn_eat.append(([dst[0], dst[1] - 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
             if dst[1] + 1 <= 7:
-                self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
-        self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)+promotion_piece_for_stockfish])
+                self.pawn_eat.append(([dst[0], dst[1] + 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
+        self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion_piece_for_stockfish])
 
-    def draw_movement(self, dst, src):
-        start_col, start_row = (src[1] + 0.26) * square_size, (
-                    src[0] + 0.26) * square_size
-        stop_col, stop_row = (dst[1] + 0.26) * square_size, (
-                    dst[0] + 0.26) * square_size
-        phase_col, phase_row = (stop_col - start_col) / 90, (
-                    start_row - stop_row) / 90
-        piece = self.board[src]
-        self.board.delete_piece(src)
-        for i in range(90):
-            self.surface.blit(pygame.image.load(piece.path_to_image()), (
-            (src[1] + 0.26) * square_size + phase_col * i+LEFT_BAR,
-            (7-src[0] + 0.26) * square_size + phase_row * i+UP_BAR))
-            pygame.display.update()
-            self.draw_board()
-        self.board.insert_piece(piece, src)
+
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
@@ -136,59 +113,35 @@ class Game:
         for piece_pos in list_of_pos_enemy:
             if square in self.board[piece_pos].possible_eats(piece_pos) and (
                     self.board[piece_pos].name() in ['king', 'knight'] or not self.board.if_blocked(
-                    square, piece_pos)):
+                square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
 
     def possible_moves(self, square):
         if self.board[square] is None:
             return []
-        my_list = [s for s in (self.board[square].possible_moves(square)+self.board[square].possible_eats(square)) if self.is_legal_move(square,s)]
+        my_list = [s for s in (self.board[square].possible_moves(square) + self.board[square].possible_eats(square)) if self.is_legal_move(square, s)]
         if (self.pawn_eat and self.board[square].name() == 'pawn') and (square == self.pawn_eat[0][0] or (len(self.pawn_eat) > 1 and square == self.pawn_eat[1][0])):
             my_list.append(self.pawn_eat[0][1] if square == self.pawn_eat[0][0] else self.pawn_eat[1][1])
-        if square in [[0,4], [7,4]] and self.board[square].name() == "king" and self.board[square].color() == self.cur_player:
+        if square in [[0, 4], [7, 4]] and self.board[square].name() == "king" and self.board[square].color() == self.cur_player:
             if [square[0], 0] in self.castling:
                 if not self.board.if_blocked(square, [square[0], 0]):
                     for i in range(3):
-                        if self.threatenings([square[0], 4-i], self.board[square].color()):
+                        if self.threatenings([square[0], 4 - i], self.board[square].color()):
                             break
                     else:
                         my_list.append([square[0], 2])
             if [square[0], 7] in self.castling:
                 if not self.board.if_blocked(square, [square[0], 7]):
                     for i in range(3):
-                        if self.threatenings([square[0], 4+i], self.board[square].color()):
+                        if self.threatenings([square[0], 4 + i], self.board[square].color()):
                             break
                     else:
                         my_list.append([square[0], 6])
         return my_list
 
-    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=[]):
-        for row in range(8):
-            for col in range(8):
 
-                if [row, col] == down_square:
-                    color = darker_yellow
-                elif [row, col] == hovered_square:
-                    color = yellow
-                elif (row + col) % 2 == 1:
-                    color = white
-                else:
-                    color = black
-                pygame.draw.rect(self.surface, color, (col * square_size+LEFT_BAR, (7-row) * square_size+UP_BAR, square_size, square_size))
-                if [row, col] in list_of_squares:
-                    if (row + col) % 2 == 1:
-                        for i in range(15):
-                            pygame.draw.rect(self.surface, (255, 200+4*i-1, 18*i), pygame.Rect(col * square_size + i+LEFT_BAR, (7-row) * square_size + i+UP_BAR, square_size - 2*i, square_size - 2*i), 1)
-                    else:
-                        for i in range(15):
-                            pygame.draw.rect(self.surface, (255-10*i, 200-10*i, 0), pygame.Rect(col * square_size + i+LEFT_BAR, (7-row) * square_size + i+UP_BAR, square_size - 2*i, square_size - 2*i),1)
-                # Draw the pieces
-                piece = self.board[[row, col]]
-                if piece is not None:
-                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size+LEFT_BAR, (7-row + 0.26) * square_size+UP_BAR))
-
-    def stalemate(self, color:bool) -> bool:
+    def stalemate(self, color: bool) -> bool:
         for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
             if self.possible_moves(piece):
                 break
@@ -202,25 +155,7 @@ class Game:
     def promotion(self, color: bool) -> pieces.Pieces:
         return pieces.Pieces('queen', color)
 
-    @staticmethod
-    def event_manager():
-        hovered = None
-        down = None
-        event = pygame.event.poll()
-        if not pygame.mouse.get_focused():
-            hovered = None
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            # Calculate the row and column of the clicked square
-            down = [7-((pos[1]-UP_BAR) // square_size), (pos[0]-LEFT_BAR) // square_size]
-        if pygame.mouse.get_focused():
-            pos = pygame.mouse.get_pos()
-            # Calculate the row and column of the clicked square
-            hovered = [7-((pos[1]-UP_BAR) // square_size), (pos[0]-LEFT_BAR) // square_size]
-        return down, hovered
+
 
     def game_manager(self):
         square_list = []
@@ -251,11 +186,11 @@ class Game:
 
 
 def str_to_sqrs(my_str: str):
-    return [[int(my_str[1])-1, ord(my_str[0])-97], [int(my_str[3])-1, ord(my_str[2])-97]]
+    return [[int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97]]
 
 
 def sqrs_to_str(src: List[int], dst: List[int]):
-    return chr(97+src[1])+str(src[0]+1)+chr(97+dst[1])+str(dst[0]+1)
+    return chr(97 + src[1]) + str(src[0] + 1) + chr(97 + dst[1]) + str(dst[0] + 1)
 
 
 def main():
@@ -263,13 +198,12 @@ def main():
     pygame.event.set_blocked(None)
     pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
     pygame.event.set_allowed(pygame.QUIT)
-    board_size = (square_size * 8+ RIGHT_BAR+LEFT_BAR, square_size * 8+UP_BAR+DOWN_BAR)
+    board_size = (square_size * 8 + RIGHT_BAR + LEFT_BAR, square_size * 8 + UP_BAR + DOWN_BAR)
     display_surface = pygame.display.set_mode(board_size)
-    game = Game(display_surface,False)
+    game = Game(display_surface, False)
     game.draw_board()
     pygame.display.update()
     game.game_manager()
-
 
 
 main()
