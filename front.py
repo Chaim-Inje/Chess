@@ -60,6 +60,7 @@ class Front:
                 piece = self.board[[row, col]]
                 if piece is not None:
                     self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size + LEFT_BAR, (7 - row + 0.26) * square_size + UP_BAR))
+
     @staticmethod
     def event_manager():
         hovered = None
@@ -72,11 +73,11 @@ class Front:
             quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-             # Calculate the row and column of the clicked square
+            # Calculate the row and column of the clicked square
             down = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
-             # Calculate the row and column of the clicked square
+            # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         return down, hovered
 
