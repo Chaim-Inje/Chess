@@ -95,7 +95,7 @@ class Game:
         for i in range(90):
             self.surface.blit(pygame.image.load(piece.path_to_image()), (
             (src[1] + 0.26) * square_size + phase_col * i,
-            (src[0] + 0.26) * square_size + phase_row * i))
+            (7-src[0] + 0.26) * square_size + phase_row * i))
             pygame.display.update()
             self.draw_board()
         self.board.insert_piece(piece, src)
@@ -172,18 +172,18 @@ class Game:
                     color = white
                 else:
                     color = black
-                pygame.draw.rect(self.surface, color, (col * square_size, row * square_size, square_size, square_size))
+                pygame.draw.rect(self.surface, color, (col * square_size, (7-row) * square_size, square_size, square_size))
                 if [row, col] in list_of_squares:
                     if (row + col) % 2 == 1:
                         for i in range(15):
-                            pygame.draw.rect(self.surface, (255, 200+4*i-1, 18*i), pygame.Rect(col * square_size + i, row * square_size + i, square_size - 2*i, square_size - 2*i), 1)
+                            pygame.draw.rect(self.surface, (255, 200+4*i-1, 18*i), pygame.Rect(col * square_size + i, (7-row) * square_size + i, square_size - 2*i, square_size - 2*i), 1)
                     else:
                         for i in range(15):
-                            pygame.draw.rect(self.surface, (255-10*i, 200-10*i, 0), pygame.Rect(col * square_size + i, row * square_size + i, square_size - 2*i, square_size - 2*i), 1)
+                            pygame.draw.rect(self.surface, (255-10*i, 200-10*i, 0), pygame.Rect(col * square_size + i, (7-row) * square_size + i, square_size - 2*i, square_size - 2*i), 1)
                 # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
-                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size, (row + 0.26) * square_size))
+                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size, (7-row + 0.26) * square_size))
 
     def stalemate(self, color:bool) -> bool:
         for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
@@ -212,11 +212,11 @@ class Game:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
-            down = [pos[1] // square_size, pos[0] // square_size]
+            down = [7-(pos[1] // square_size), pos[0] // square_size]
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
-            hovered = [pos[1] // square_size, pos[0] // square_size]
+            hovered = [7-(pos[1] // square_size), pos[0] // square_size]
         return down, hovered
 
     def game_manager(self):
