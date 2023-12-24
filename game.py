@@ -15,6 +15,7 @@ UP_BAR = 0
 RIGHT_BAR = 0
 DOWN_BAR = 0
 
+
 class Game:
     def __init__(self, surface, two_players = False):
         self.cur_player: bool = pieces.WHITE
