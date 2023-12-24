@@ -33,6 +33,8 @@ class Front:
         self.board.insert_piece(piece, src)
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
+        if not list_of_squares:
+            list_of_squares = []
         for row in range(8):
             for col in range(8):
 
