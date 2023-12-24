@@ -89,7 +89,7 @@ class Game:
         stop_col, stop_row = (dst[1] + 0.26) * square_size, (
                     dst[0] + 0.26) * square_size
         phase_col, phase_row = (stop_col - start_col) / 90, (
-                    stop_row - start_row) / 90
+                    start_row - stop_row) / 90
         piece = self.board[src]
         self.board.delete_piece(src)
         for i in range(90):
