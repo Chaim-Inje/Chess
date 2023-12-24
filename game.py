@@ -43,6 +43,7 @@ class Game:
         self.two_players = two_players
 
     def move(self, src, dst):
+        self.draw_movement(dst, src)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] ==(src,dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src,dst) else self.pawn_eat[1][2])
         if self.board[dst]:
@@ -59,9 +60,12 @@ class Game:
                 self.castling.remove([7,0])
             if [7,7] in self.castling:
                 self.castling.remove([7,7])
+        piece = self.board[src]
         if self.board[src].name() == "king" and src[1] == dst[1]-2:
+            self.draw_movement([src[0], 5], [src[0], 7])
             self.board.move_piece([src[0], 7], [src[0], 5])
         if self.board[src].name() == "king" and src[1] == dst[1]+2:
+            self.draw_movement([src[0], 3], [src[0], 0])
             self.board.move_piece([src[0], 0], [src[0], 3])
         self.board.move_piece(src, dst)
         promotion_piece_for_stockfish = ''
@@ -79,6 +83,22 @@ class Game:
                 self.pawn_eat.append(([dst[0], dst[1]+1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
         self.stockfish.make_moves_from_current_position([sqrs_to_str(src,dst)+promotion_piece_for_stockfish])
 
+    def draw_movement(self, dst, src):
+        start_col, start_row = (src[1] + 0.26) * square_size, (
+                    src[0] + 0.26) * square_size
+        stop_col, stop_row = (dst[1] + 0.26) * square_size, (
+                    dst[0] + 0.26) * square_size
+        phase_col, phase_row = (stop_col - start_col) / 90, (
+                    stop_row - start_row) / 90
+        piece = self.board[src]
+        self.board.delete_piece(src)
+        for i in range(90):
+            self.surface.blit(pygame.image.load(piece.path_to_image()), (
+            (src[1] + 0.26) * square_size + phase_col * i,
+            (src[0] + 0.26) * square_size + phase_row * i))
+            pygame.display.update()
+            self.draw_board()
+        self.board.insert_piece(piece, src)
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
@@ -154,8 +174,12 @@ class Game:
                     color = black
                 pygame.draw.rect(self.surface, color, (col * square_size, row * square_size, square_size, square_size))
                 if [row, col] in list_of_squares:
-                    pygame.draw.rect(self.surface, yellow, pygame.Rect(col * square_size, row * square_size, square_size, square_size), 5)
-
+                    if (row + col) % 2 == 1:
+                        for i in range(15):
+                            pygame.draw.rect(self.surface, (255, 200+4*i-1, 18*i), pygame.Rect(col * square_size + i, row * square_size + i, square_size - 2*i, square_size - 2*i), 1)
+                    else:
+                        for i in range(15):
+                            pygame.draw.rect(self.surface, (255-10*i, 200-10*i, 0), pygame.Rect(col * square_size + i, row * square_size + i, square_size - 2*i, square_size - 2*i), 1)
                 # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
@@ -171,6 +195,7 @@ class Game:
 
     def checkmate(self, color: bool) -> bool:
         return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
+
     def promotion(self, color: bool) -> pieces.Pieces:
         return pieces.Pieces('queen', color)
 
@@ -223,19 +248,11 @@ class Game:
 
 
 def str_to_sqrs(my_str: str):
-    src_row = int(my_str[1]) - 1
-    src_col = ord(my_str[0]) - 97
-    dst_row = int(my_str[3]) - 1
-    dst_col = ord(my_str[2]) - 97
-    return [[src_row, src_col], [dst_row, dst_col]]
+    return [[int(my_str[1])-1, ord(my_str[0])-97], [int(my_str[3])-1, ord(my_str[2])-97]]
 
 
 def sqrs_to_str(src: List[int], dst: List[int]):
-    src_row = str(src[0]+1)
-    src_col = chr(97+src[1])
-    dst_row = str(dst[0]+1)
-    dst_col = chr(97+dst[1])
-    return src_col+src_row+dst_col+dst_row
+    return chr(97+src[1])+str(src[0]+1)+chr(97+dst[1])+str(dst[0]+1)
 
 
 def main():
@@ -251,8 +268,4 @@ def main():
     game.game_manager()
 
 
-
-
-
 main()
-
