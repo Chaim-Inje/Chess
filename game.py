@@ -183,7 +183,7 @@ class Game:
                 situation = STALEMATE
             if self.checkmate(self.cur_player):
                 situation = CHECKMATE
-            self.front.draw_surface(situation,self.cur_player)
+            self.front.draw_surface(situation, self.cur_player)
             down, hovered, reset, start_over = self.front.event_manager()
             if reset or start_over:
                 return reset

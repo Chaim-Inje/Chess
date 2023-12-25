@@ -1,4 +1,4 @@
-from game import Game
+import game
 import pygame
 import front
 
@@ -15,8 +15,8 @@ def main():
     while True:
         if reset:
             two_players, level = front.Front.start_display()
-        game = Game(display_surface, two_players, level)
-        reset = game.game_manager()
+        new_game = game.Game(display_surface, two_players, level)
+        reset = new_game.game_manager()
 
 
 main()

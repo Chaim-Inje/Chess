@@ -4,9 +4,9 @@ black = (120, 65, 0)
 yellow = (255, 200, 0)
 darker_yellow = (200, 150, 0)
 square_size = 70
-LEFT_BAR = 50
-UP_BAR = 80
-RIGHT_BAR = 30
+LEFT_BAR = 120
+UP_BAR = 60
+RIGHT_BAR = 120
 DOWN_BAR = 60
 FRAME_SIZE = 20
 
@@ -90,14 +90,14 @@ class Front:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
-        return down, hovered
+        return down, hovered, 0,0
 
     def get_promoted(self):
         pass
 
     @staticmethod
     def start_display():
-        pass
+        return True, 10
 
     def draw_surface(self, situation, turn):
         pass
