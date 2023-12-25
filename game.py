@@ -75,10 +75,14 @@ class Game:
             if [7, 7] in self.castling:
                 self.castling.remove([7, 7])
         if self.board[src].name() == "king" and src[1] == dst[1] - 2:
+            self.board.move_piece(src, dst)
             self.front.draw_movement([src[0], 5], [src[0], 7])
+            self.board.move_piece(dst, src)
             self.board.move_piece([src[0], 7], [src[0], 5])
         if self.board[src].name() == "king" and src[1] == dst[1] + 2:
+            self.board.move_piece(src, dst)
             self.front.draw_movement([src[0], 3], [src[0], 0])
+            self.board.move_piece(dst, src)
             self.board.move_piece([src[0], 0], [src[0], 3])
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
@@ -197,7 +201,7 @@ def main():
     pygame.event.set_allowed(pygame.QUIT)
     board_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
     display_surface = pygame.display.set_mode(board_size)
-    game = Game(display_surface, True)
+    game = Game(display_surface, False)
     game.front.draw_board()
     pygame.display.update()
     game.game_manager()

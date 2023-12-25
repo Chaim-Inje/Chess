@@ -4,11 +4,11 @@ black = (120, 65, 0)
 yellow = (255, 200, 0)
 darker_yellow = (200, 150, 0)
 square_size = 70
-LEFT_BAR = 20
-UP_BAR = 20
-RIGHT_BAR = 20
-DOWN_BAR = 20
-
+LEFT_BAR = 50
+UP_BAR = 80
+RIGHT_BAR = 30
+DOWN_BAR = 60
+FRAME_SIZE = 20
 
 class Front:
     def __init__(self, screen, board):
@@ -34,14 +34,17 @@ class Front:
         self.board.insert_piece(piece, src)
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
-        pygame.draw.rect(self.surface,(255,255,255),pygame.Rect(0,0,LEFT_BAR+RIGHT_BAR+8*square_size, UP_BAR+DOWN_BAR+8*square_size),UP_BAR)
-        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(0+LEFT_BAR-1,0+RIGHT_BAR-1,2+8*square_size, 2+8*square_size),1)
-        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(0,0,RIGHT_BAR+LEFT_BAR+8*square_size, UP_BAR+DOWN_BAR+10+8*square_size),1)
+        pygame.draw.rect(self.surface,(255,255,255),pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),FRAME_SIZE)
+        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(LEFT_BAR-1,UP_BAR-1,2+8*square_size, 2+8*square_size),1)
+        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+10+8*square_size),1)
 
         font = pygame.font.SysFont('Comic Sans MS', 17)
         for i in range(1, 9):
-            text = font.render(str(9-i), True, (0,0,0))
-            self.surface.blit(text, (LEFT_BAR//4,UP_BAR+(i-1+0.4)*square_size))
+            num = font.render(str(9-i), True, (0,0,0))
+            letter = font.render(chr(65+i), True, (0,0,0))
+            self.surface.blit(num, (LEFT_BAR-FRAME_SIZE*3//4,UP_BAR+(i-1+0.4)*square_size))
+            self.surface.blit(num, (LEFT_BAR+8*square_size+FRAME_SIZE//4,UP_BAR+(i-1+0.4)*square_size))
+            self.surface.blit(letter, (LEFT_BAR+i*square_size+square_size/2,UP_BAR+FRAME_SIZE))
         if not list_of_squares:
             list_of_squares = []
         for row in range(8):
