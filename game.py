@@ -12,6 +12,7 @@ STALEMATE = 2
 CHECKMATE = 3
 
 
+
 class Game:
     def __init__(self, surface, two_players=False, level=10):
         self.cur_player: bool = pieces.WHITE
@@ -176,6 +177,7 @@ class Game:
         pygame.display.update()
         square_list = []
         state = ALL_GOOD
+        src_and_dst = None
         while True:
             if self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
                 state = CHECK
@@ -194,7 +196,7 @@ class Game:
                     new_down, hovered, reset,start_over = self.front.event_manager()
                     if reset or start_over:
                         return reset
-                    self.front.draw_board(hovered, down, square_list)
+                    self.front.draw_board(hovered, down, square_list,src_and_dst)
                     pygame.display.update()
                 if new_down in [down] + square_list:
                     if new_down != down:
@@ -202,16 +204,18 @@ class Game:
                         if self.board[down].name() == 'pawn' and (new_down[0] == 0 or new_down[0] == 7):
                             string_for_promotion = self.front.get_promoted(self.cur_player)
                         self.move(down, new_down, string_for_promotion)
+                        src_and_dst = [down, new_down]
                         if self.cur_player == pieces.BLACK and not self.two_players:
-                            self.front.draw_board(hovered)
+                            self.front.draw_board(hovered,src_and_dst=src_and_dst)
                             pygame.display.update()
                             best_move = self.stockfish.get_best_move()
                             self.move(*str_to_sqrs(best_move))
+                            src_and_dst = list(str_to_sqrs(best_move)[0:2])
                     down = None
                     square_list = []
                 else:
                     down = new_down
-            self.front.draw_board(hovered, down, square_list)
+            self.front.draw_board(hovered, down, square_list,src_and_dst)
             pygame.display.update()
 
 

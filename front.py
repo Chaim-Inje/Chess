@@ -5,6 +5,8 @@ BROWN = (120, 65, 0)
 YELLOW = (255, 200, 0)
 DARK_YELLOW = (200, 150, 0)
 BEIGE = (202, 167, 124)
+GREEN_WHITE = (100,255,0)
+GREEN_BLACK = (0,255,0)
 SQUARE_SIZE = 70
 LEFT_BAR = 40
 UP_BAR = 40
@@ -63,7 +65,8 @@ class Front:
             self.draw_board()
         self.board.insert_piece(piece, src)
 
-    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
+
+    def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None, src_and_dst=None):
         pygame.draw.rect(self.surface, WHITE, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), FRAME_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - LINE_SIZE, UP_BAR - LINE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
@@ -79,6 +82,8 @@ class Front:
             self.surface.blit(letter, (LEFT_BAR + (i-1) * SQUARE_SIZE + SQUARE_SIZE * 4 // 9, UP_BAR + 8 * SQUARE_SIZE))
         if not list_of_squares:
             list_of_squares = []
+        if not src_and_dst:
+            src_and_dst = []
         for row in range(8):
             for col in range(8):
 
@@ -86,6 +91,8 @@ class Front:
                     color = DARK_YELLOW
                 elif [row, col] == hovered_square:
                     color = YELLOW
+                elif [row,col] in src_and_dst:
+                    color = GREEN_WHITE if (row+col)%2 else GREEN_BLACK
                 elif (row + col) % 2 == 1:
                     color = WHITE
                 else:
@@ -109,6 +116,8 @@ class Front:
     def event_manager():
         hovered = None
         down = None
+        reset = False
+        start_over = False
         event = pygame.event.poll()
         if not pygame.mouse.get_focused():
             hovered = None
@@ -119,11 +128,19 @@ class Front:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             down = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
+            if pos[0] <= LEFT_BAR or pos[0] > SQUARE_SIZE*8 + LEFT_BAR or pos[1] <= UP_BAR or pos[1] > SQUARE_SIZE*8 + UP_BAR:
+                down = None
+                if RESET_BUTTON_LOCATION[0] <= pos[0] <= RESET_BUTTON_LOCATION[0] + RESET_BUTTON_SIZE[0] and RESET_BUTTON_LOCATION[1] <= pos[1] <= RESET_BUTTON_LOCATION[1]+RESET_BUTTON_SIZE[1]:
+                    reset = True
+                elif START_OVER_BUTTON_LOCATION[0] <= pos[0] <= START_OVER_BUTTON_LOCATION[0] + START_OVER_BUTTON_SIZE[0] and START_OVER_BUTTON_LOCATION[1] <= pos[1] <= START_OVER_BUTTON_LOCATION[1]+START_OVER_BUTTON_SIZE[1]:
+                    start_over = True
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
-        return down, hovered, 0,0
+            if pos[0] <= LEFT_BAR or pos[0] > SQUARE_SIZE * 8 + LEFT_BAR or pos[1] <= UP_BAR or pos[1] > SQUARE_SIZE * 8 + UP_BAR:
+                hovered = None
+        return down, hovered, reset,start_over
 
     def get_promoted(self, color):
         pass
