@@ -97,12 +97,12 @@ class Front:
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         return down, hovered, 0,0
 
-    def get_promoted(self):
+    def get_promoted(self, color):
         pass
 
     @staticmethod
     def start_display():
-        return True, 10
+        return False, 10
 
     def draw_surface(self, situation, turn):
         pass

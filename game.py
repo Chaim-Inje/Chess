@@ -200,7 +200,7 @@ class Game:
                     if new_down != down:
                         string_for_promotion = ''
                         if self.board[down].name() == 'pawn' and (new_down[0] == 0 or new_down[0] == 7):
-                            string_for_promotion = self.front.get_promoted()
+                            string_for_promotion = self.front.get_promoted(self.cur_player)
                         self.move(down, new_down, string_for_promotion)
                         if self.cur_player == pieces.BLACK and not self.two_players:
                             self.front.draw_board(hovered)
