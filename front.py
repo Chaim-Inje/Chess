@@ -37,7 +37,6 @@ class Front:
             list_of_squares = []
         for row in range(8):
             for col in range(8):
-
                 if [row, col] == down_square:
                     color = darker_yellow
                 elif [row, col] == hovered_square:
@@ -80,10 +79,3 @@ class Front:
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         return down, hovered
-
-
-
-
-
-
-

@@ -45,6 +45,24 @@ class Game:
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src, dst) else self.pawn_eat[1][2])
         if self.board[dst]:
             self.board.delete_piece(dst)
+        self.castling_manager(dst, src)
+        self.board.move_piece(src, dst)
+        promotion_piece_for_stockfish = ''
+        if self.board[dst].name() == 'pawn' and (dst[0] == 0 or dst[0] == 7):
+            my_boy = self.promotion(self.board[dst].color())
+            self.board.delete_piece(dst)
+            self.board.insert_piece(my_boy, dst)
+            promotion_piece_for_stockfish = my_boy.name()[0]
+        self.cur_player = not self.cur_player
+        self.pawn_eat = []
+        if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
+            if dst[1] - 1 >= 0:
+                self.pawn_eat.append(([dst[0], dst[1] - 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
+            if dst[1] + 1 <= 7:
+                self.pawn_eat.append(([dst[0], dst[1] + 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
+        self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion_piece_for_stockfish])
+
+    def castling_manager(self, dst, src):
         if src in self.castling:
             self.castling.remove(src)
         elif src == [0, 4]:
@@ -63,22 +81,6 @@ class Game:
         if self.board[src].name() == "king" and src[1] == dst[1] + 2:
             self.front.draw_movement([src[0], 3], [src[0], 0])
             self.board.move_piece([src[0], 0], [src[0], 3])
-        self.board.move_piece(src, dst)
-        promotion_piece_for_stockfish = ''
-        if self.board[dst].name() == 'pawn' and (dst[0] == 0 or dst[0] == 7):
-            my_boy = self.promotion(self.board[dst].color())
-            self.board.delete_piece(dst)
-            self.board.insert_piece(my_boy, dst)
-            promotion_piece_for_stockfish = my_boy.name()[0]
-        self.cur_player = not self.cur_player
-        self.pawn_eat = []
-        if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
-            if dst[1] - 1 >= 0:
-                self.pawn_eat.append(([dst[0], dst[1] - 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
-            if dst[1] + 1 <= 7:
-                self.pawn_eat.append(([dst[0], dst[1] + 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
-        self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion_piece_for_stockfish])
-
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
         if not self.board[src]:
@@ -140,7 +142,6 @@ class Game:
                         my_list.append([square[0], 6])
         return my_list
 
-
     def stalemate(self, color: bool) -> bool:
         for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
             if self.possible_moves(piece):
@@ -154,8 +155,6 @@ class Game:
 
     def promotion(self, color: bool) -> pieces.Pieces:
         return pieces.Pieces('queen', color)
-
-
 
     def game_manager(self):
         square_list = []
@@ -200,7 +199,7 @@ def main():
     pygame.event.set_allowed(pygame.QUIT)
     board_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
     display_surface = pygame.display.set_mode(board_size)
-    game = Game(display_surface, False)
+    game = Game(display_surface, True)
     game.front.draw_board()
     pygame.display.update()
     game.game_manager()
