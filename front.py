@@ -234,6 +234,7 @@ class Front:
                         return False, i+1
 
     def draw_surface(self, state, turn):
+        self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
         pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
         self.surface.blit(font.render("RESET", True, WHITE), RESET_BUTTON_LOCATION)
