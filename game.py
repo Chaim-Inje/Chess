@@ -179,7 +179,6 @@ class Game:
         self.front.draw_board()
         pygame.display.update()
         square_list = []
-        state = ALL_GOOD
         src_and_dst = None
         while True:
             if self.checkmate(self.cur_player):
