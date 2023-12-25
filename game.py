@@ -36,10 +36,11 @@ class Game:
         self.castling = [[0, 0], [0, 7], [7, 0], [7, 7]]
         self.pawn_eat = []
         self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
+        self.stockfish.set_skill_level(10)
         self.two_players = two_players
         self.front = front.Front(surface, self.board)
 
-    def move(self, src, dst):
+    def move(self, src, dst, promotion: str = ''):
         self.front.draw_movement(dst, src)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] == (src, dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src, dst) else self.pawn_eat[1][2])
@@ -47,12 +48,10 @@ class Game:
             self.board.delete_piece(dst)
         self.castling_manager(dst, src)
         self.board.move_piece(src, dst)
-        promotion_piece_for_stockfish = ''
-        if self.board[dst].name() == 'pawn' and (dst[0] == 0 or dst[0] == 7):
-            my_boy = self.promotion(self.board[dst].color())
+        if promotion:
+            my_boy = self.promotion(promotion, self.board[dst].color())
             self.board.delete_piece(dst)
             self.board.insert_piece(my_boy, dst)
-            promotion_piece_for_stockfish = my_boy.name()[0]
         self.cur_player = not self.cur_player
         self.pawn_eat = []
         if abs(src[0] - dst[0]) == 2 and self.board[dst].name() == 'pawn':
@@ -60,7 +59,7 @@ class Game:
                 self.pawn_eat.append(([dst[0], dst[1] - 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
             if dst[1] + 1 <= 7:
                 self.pawn_eat.append(([dst[0], dst[1] + 1], [dst[0] + (1 if not self.board[dst].color() else -1), dst[1]], dst))
-        self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion_piece_for_stockfish])
+        self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion])
 
     def castling_manager(self, dst, src):
         if src in self.castling:
@@ -114,8 +113,7 @@ class Game:
         list_of_threatenings = []
         for piece_pos in list_of_pos_enemy:
             if square in self.board[piece_pos].possible_eats(piece_pos) and (
-                    self.board[piece_pos].name() in ['king', 'knight'] or not self.board.if_blocked(
-                square, piece_pos)):
+                    self.board[piece_pos].name() in ['king', 'knight'] or not self.board.if_blocked(square, piece_pos)):
                 list_of_threatenings.append(piece_pos)
         return list_of_threatenings
 
@@ -153,7 +151,7 @@ class Game:
     def checkmate(self, color: bool) -> bool:
         return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
 
-    def promotion(self, color: bool) -> pieces.Pieces:
+    def promotion(self,name:str, color: bool) -> pieces.Pieces:
         return pieces.Pieces('queen', color)
 
     def game_manager(self):
