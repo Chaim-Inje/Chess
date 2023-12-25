@@ -47,6 +47,7 @@ class Front:
         pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(*STATE_BAR_LOCATION, *STATE_BAR_SIZE), LINE_SIZE)
         self.surface.blit(font.render("RESET", True, BLACK), RESET_BUTTON_LOCATION)
+        self.music = True
 
     def draw_movement(self, dst, src):
         start_col, start_row = (src[1] + 0.26) * SQUARE_SIZE, (
