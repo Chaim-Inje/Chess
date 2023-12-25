@@ -24,7 +24,10 @@ TURN_BAR_LOCATION = (680,250)
 TURN_BAR_SIZE = (110,30)
 STATE_BAR_LOCATION = (680,300)
 STATE_BAR_SIZE = (80,30)
-
+PROMOTION_SCREEN_LOCATION = (680,400)
+PHOTO_SIZE = 50
+PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
+RED = (255,0,0)
 
 
 class Front:
@@ -130,10 +133,35 @@ class Front:
             hovered = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
             if pos[0] < LEFT_BAR or pos[0] >= SQUARE_SIZE * 8 + LEFT_BAR or pos[1] < UP_BAR or pos[1] >= SQUARE_SIZE * 8 + UP_BAR:
                 hovered = None
-        return down, hovered, reset,start_over
+        return down, hovered, reset, start_over
 
     def get_promoted(self, color):
-        pass
+        pygame.draw.rect(self.surface, WHITE, (*PROMOTION_SCREEN_LOCATION, *PROMOTION_SCREEN_SIZE))
+        font = pygame.font.SysFont('Comic Sans MS', 14)
+        self.surface.blit(font.render("CHOOSE PIECE", True, BLACK), (PROMOTION_SCREEN_LOCATION[0],PROMOTION_SCREEN_LOCATION[1]-20))
+        space = 10
+        self.surface.blit(pygame.image.load('images/'+ ("white " if color else "black ") + 'rook promotion.png'), (PROMOTION_SCREEN_LOCATION[0] + PHOTO_SIZE+space, PROMOTION_SCREEN_LOCATION[1]+space))
+        self.surface.blit(pygame.image.load('images/'+ ("white " if color else "black ") + 'queen promotion.png'), (PROMOTION_SCREEN_LOCATION[0]+space,PROMOTION_SCREEN_LOCATION[1]+space))
+        self.surface.blit(pygame.image.load('images/'+ ("white " if color else "black ") + 'knight promotion.png'), (PROMOTION_SCREEN_LOCATION[0]+space, PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE+space))
+        self.surface.blit(pygame.image.load('images/'+ ("white " if color else "black ") + 'bishop promotion.png'), (PROMOTION_SCREEN_LOCATION[0] + PHOTO_SIZE+space, PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE+space))
+        pygame.display.update()
+        while True:
+            event = pygame.event.poll()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                if PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
+                    return 'q'
+                elif PROMOTION_SCREEN_LOCATION[0]+ PHOTO_SIZE <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
+                    return 'r'
+                elif PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + 2*PHOTO_SIZE:
+                    return 'n'
+                elif PROMOTION_SCREEN_LOCATION[0] + PHOTO_SIZE<= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE*2:
+                    return 'b'
+                else:
+                    for i in range(901):
+                        pygame.draw.rect(self.surface, RED , pygame.Rect(PROMOTION_SCREEN_LOCATION[0], PROMOTION_SCREEN_LOCATION[1], PROMOTION_SCREEN_SIZE[0],PROMOTION_SCREEN_SIZE[1]), 5)
+
+                        pygame.display.update()
 
     @staticmethod
     def start_display():

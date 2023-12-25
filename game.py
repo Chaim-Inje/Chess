@@ -158,7 +158,7 @@ class Game:
         return False
 
     def checkmate(self, color: bool) -> bool:
-        return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
+        return self.stalemate(color) and (self.threatenings((self.board.white_king() if color else self.board.black_king()), color))
 
     def promotion(self,name:str, color: bool) -> pieces.Pieces:
         my_str = ''
@@ -179,12 +179,15 @@ class Game:
         state = ALL_GOOD
         src_and_dst = None
         while True:
-            if self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
+            if self.checkmate(self.cur_player):
+                print(self.board.black_pieces())
+                state = CHECKMATE
+            elif self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
                 state = CHECK
             elif self.stalemate(self.cur_player):
                 state = STALEMATE
-            if self.checkmate(self.cur_player):
-                state = CHECKMATE
+            else:
+                state = ALL_GOOD
             self.front.draw_surface(state, self.cur_player)
             down, hovered, reset, start_over = self.front.event_manager()
             if reset or start_over:
