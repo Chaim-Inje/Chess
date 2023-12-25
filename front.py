@@ -91,5 +91,13 @@ class Front:
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         return down, hovered
+
     def get_promoted(self):
+        pass
+
+    @staticmethod
+    def start_display():
+        pass
+
+    def draw_surface(self, situation, turn):
         pass

@@ -6,10 +6,14 @@ import pygame
 from stockfish import Stockfish
 from time import sleep
 import front
+ALL_GOOD = 0
+CHECK = 1
+STALEMATE = 2
+CHECKMATE = 3
 
 
 class Game:
-    def __init__(self, surface, two_players=False):
+    def __init__(self, surface, two_players=False, level=10):
         self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
         self.board.insert_piece(pieces.Pieces("king", pieces.WHITE), [0, 4])
@@ -36,7 +40,7 @@ class Game:
         self.castling = [[0, 0], [0, 7], [7, 0], [7, 7]]
         self.pawn_eat = []
         self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
-        self.stockfish.set_skill_level(10)
+        self.stockfish.set_skill_level(level)
         self.two_players = two_players
         self.front = front.Front(surface, self.board)
 
@@ -168,14 +172,28 @@ class Game:
         return pieces.Pieces(my_str, color)
 
     def game_manager(self):
+        self.front.draw_board()
+        pygame.display.update()
         square_list = []
+        situation = ALL_GOOD
         while True:
-            down, hovered = self.front.event_manager()
+            if self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
+                situation = CHECK
+            elif self.stalemate(self.cur_player):
+                situation = STALEMATE
+            if self.checkmate(self.cur_player):
+                situation = CHECKMATE
+            self.front.draw_surface(situation,self.cur_player)
+            down, hovered, reset, start_over = self.front.event_manager()
+            if reset or start_over:
+                return reset
             while down:
                 square_list = self.possible_moves(down)
                 new_down = None
                 while not new_down:
-                    new_down, hovered = self.front.event_manager()
+                    new_down, hovered, reset,start_over = self.front.event_manager()
+                    if reset or start_over:
+                        return reset
                     self.front.draw_board(hovered, down, square_list)
                     pygame.display.update()
                 if new_down in [down] + square_list:
@@ -199,7 +217,7 @@ class Game:
 
 
 def str_to_sqrs(my_str: str):
-    return [[int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97]], '' if len(my_str) < 5 else my_str[4]
+    return [int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97], '' if len(my_str) < 5 else my_str[4]
 
 
 def sqrs_to_str(src: List[int], dst: List[int]):
@@ -211,12 +229,15 @@ def main():
     pygame.event.set_blocked(None)
     pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
     pygame.event.set_allowed(pygame.QUIT)
-    board_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
-    display_surface = pygame.display.set_mode(board_size)
-    game = Game(display_surface, False)
-    game.front.draw_board()
-    pygame.display.update()
-    game.game_manager()
+    surface_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
+    display_surface = pygame.display.set_mode(surface_size)
+    two_players, level = front.Front.start_display()
+    reset = False
+    while True:
+        if reset:
+            two_players, level = front.Front.start_display()
+        game = Game(display_surface, two_players, level)
+        reset = game.game_manager()
 
 
 main()
