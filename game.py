@@ -150,11 +150,14 @@ class Game:
         return my_list
 
     def stalemate(self, color: bool) -> bool:
-        for piece in (self.board.white_pieces() if color else self.board.black_pieces()):
+        my_list = self.board.white_pieces() if color else self.board.black_pieces()
+        for piece in (my_list):
             if self.possible_moves(piece):
                 break
         else:
-            return self.cur_player == color
+            # print('uuu')
+            # print(self.board.white_pieces() if color else self.board.black_pieces())
+            return True
         return False
 
     def checkmate(self, color: bool) -> bool:
@@ -180,7 +183,6 @@ class Game:
         src_and_dst = None
         while True:
             if self.checkmate(self.cur_player):
-                print(self.board.black_pieces())
                 state = CHECKMATE
             elif self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
                 state = CHECK

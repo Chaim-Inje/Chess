@@ -51,7 +51,9 @@ class Front:
         self.surface = screen
         self.board = board
         self.music = True
-
+        self.warning_sound = pygame.mixer.Sound('sounds/warning.wav')
+        self.eating_sound = pygame.mixer.Sound('sounds/eat.wav')
+        self.moving_sound = pygame.mixer.Sound('sounds/move.wav')
     def draw_movement(self, dst, src):
         start_col, start_row = (src[1] + 0.26) * SQUARE_SIZE, (
                 src[0] + 0.26) * SQUARE_SIZE
@@ -61,6 +63,10 @@ class Front:
                 start_row - stop_row) / 90
         piece = self.board[src]
         self.board.delete_piece(src)
+        if self.board[dst] and self.music:
+            self.eating_sound.play()
+        elif self.music:
+            self.moving_sound.play()
         for i in range(90):
             self.surface.blit(pygame.image.load(piece.path_to_image()), (
                 (src[1] + 0.26) * SQUARE_SIZE + phase_col * i + LEFT_BAR,
@@ -138,10 +144,10 @@ class Front:
                 elif START_OVER_BUTTON_LOCATION[0] <= pos[0] < START_OVER_BUTTON_LOCATION[0] + START_OVER_BUTTON_SIZE[0] and START_OVER_BUTTON_LOCATION[1] <= pos[1] < START_OVER_BUTTON_LOCATION[1]+START_OVER_BUTTON_SIZE[1]:
                     start_over = True
                 elif SOUND_BUTTON_LOCATION[0] <= pos[0] < SOUND_BUTTON_LOCATION[0] + SOUND_BUTTON_SIZE[0] and SOUND_BUTTON_LOCATION[1] <= pos[1] < SOUND_BUTTON_LOCATION[1]+SOUND_BUTTON_SIZE[1]:
-                    if self.music:
-                        pygame.mixer.pause()
-                    else:
-                        pygame.mixer.unpause()
+                    # if self.music:
+                    #     pygame.mixer.pause()
+                    # else:
+                    #     pygame.mixer.unpause()
                     self.music = not self.music
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
@@ -175,8 +181,9 @@ class Front:
                     return 'b'
                 else:
                     for i in range(901):
-                        pygame.draw.rect(self.surface, RED , pygame.Rect(PROMOTION_SCREEN_LOCATION[0], PROMOTION_SCREEN_LOCATION[1], PROMOTION_SCREEN_SIZE[0],PROMOTION_SCREEN_SIZE[1]), 5)
-
+                        pygame.draw.rect(self.surface, RED if i != 900 else WHITE, pygame.Rect(PROMOTION_SCREEN_LOCATION[0], PROMOTION_SCREEN_LOCATION[1], PROMOTION_SCREEN_SIZE[0],PROMOTION_SCREEN_SIZE[1]), 5)
+                        if self.music:
+                            self.warning_sound.play()
                         pygame.display.update()
 
     @staticmethod
