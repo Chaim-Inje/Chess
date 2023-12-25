@@ -113,8 +113,7 @@ class Front:
                 if piece is not None:
                     self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * SQUARE_SIZE + LEFT_BAR, (7 - row + 0.26) * SQUARE_SIZE + UP_BAR))
 
-    @staticmethod
-    def event_manager():
+    def event_manager(self):
         hovered = None
         down = None
         reset = False
@@ -129,17 +128,23 @@ class Front:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             down = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
-            if pos[0] <= LEFT_BAR or pos[0] > SQUARE_SIZE*8 + LEFT_BAR or pos[1] <= UP_BAR or pos[1] > SQUARE_SIZE*8 + UP_BAR:
+            if pos[0] < LEFT_BAR or pos[0] >= SQUARE_SIZE*8 + LEFT_BAR or pos[1] < UP_BAR or pos[1] >= SQUARE_SIZE*8 + UP_BAR:
                 down = None
-                if RESET_BUTTON_LOCATION[0] <= pos[0] <= RESET_BUTTON_LOCATION[0] + RESET_BUTTON_SIZE[0] and RESET_BUTTON_LOCATION[1] <= pos[1] <= RESET_BUTTON_LOCATION[1]+RESET_BUTTON_SIZE[1]:
+                if RESET_BUTTON_LOCATION[0] <= pos[0] < RESET_BUTTON_LOCATION[0] + RESET_BUTTON_SIZE[0] and RESET_BUTTON_LOCATION[1] <= pos[1] < RESET_BUTTON_LOCATION[1]+RESET_BUTTON_SIZE[1]:
                     reset = True
-                elif START_OVER_BUTTON_LOCATION[0] <= pos[0] <= START_OVER_BUTTON_LOCATION[0] + START_OVER_BUTTON_SIZE[0] and START_OVER_BUTTON_LOCATION[1] <= pos[1] <= START_OVER_BUTTON_LOCATION[1]+START_OVER_BUTTON_SIZE[1]:
+                elif START_OVER_BUTTON_LOCATION[0] <= pos[0] < START_OVER_BUTTON_LOCATION[0] + START_OVER_BUTTON_SIZE[0] and START_OVER_BUTTON_LOCATION[1] <= pos[1] < START_OVER_BUTTON_LOCATION[1]+START_OVER_BUTTON_SIZE[1]:
                     start_over = True
+                elif SOUND_BUTTON_LOCATION[0] <= pos[0] < SOUND_BUTTON_LOCATION[0] + SOUND_BUTTON_SIZE[0] and SOUND_BUTTON_LOCATION[1] <= pos[1] < SOUND_BUTTON_LOCATION[1]+SOUND_BUTTON_SIZE[1]:
+                    if self.music:
+                        pygame.mixer.pause()
+                    else:
+                        pygame.mixer.unpause()
+                    self.music = not self.music
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
-            if pos[0] <= LEFT_BAR or pos[0] > SQUARE_SIZE * 8 + LEFT_BAR or pos[1] <= UP_BAR or pos[1] > SQUARE_SIZE * 8 + UP_BAR:
+            if pos[0] < LEFT_BAR or pos[0] >= SQUARE_SIZE * 8 + LEFT_BAR or pos[1] < UP_BAR or pos[1] >= SQUARE_SIZE * 8 + UP_BAR:
                 hovered = None
         return down, hovered, reset,start_over
 
