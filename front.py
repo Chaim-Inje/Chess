@@ -16,7 +16,6 @@ class Front:
         self.board = board
 
     def draw_movement(self, dst, src):
-
         start_col, start_row = (src[1] + 0.26) * square_size, (
                 src[0] + 0.26) * square_size
         stop_col, stop_row = (dst[1] + 0.26) * square_size, (
@@ -92,3 +91,5 @@ class Front:
             # Calculate the row and column of the clicked square
             hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
         return down, hovered
+    def get_promoted(self):
+        pass
