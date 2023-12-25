@@ -4,11 +4,12 @@ white = (255, 255, 255)
 brown = (120, 65, 0)
 yellow = (255, 200, 0)
 darker_yellow = (200, 150, 0)
+beige = (202,167,124)
 square_size = 70
-LEFT_BAR = 120
-UP_BAR = 60
-RIGHT_BAR = 120
-DOWN_BAR = 60
+LEFT_BAR = 40
+UP_BAR = 40
+RIGHT_BAR = 200
+DOWN_BAR = 40
 FRAME_SIZE = 20
 LINE_SIZE = 1
 
