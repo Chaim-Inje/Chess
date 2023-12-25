@@ -11,7 +11,6 @@ def main():
     surface_size = (front.SQUARE_SIZE * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.SQUARE_SIZE * 8 + front.UP_BAR + front.DOWN_BAR)
     display_surface = pygame.display.set_mode(surface_size)
     two_players, level = front.Front.start_display()
-    display_surface.fill(front.BEIGE)
     reset = False
     while True:
         if reset:

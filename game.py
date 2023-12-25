@@ -7,9 +7,9 @@ from stockfish import Stockfish
 from time import sleep
 import front
 ALL_GOOD = 0
-CHECK = 1
-STALEMATE = 2
-CHECKMATE = 3
+CHECK = "CHECK"
+STALEMATE = "STALEMATE"
+CHECKMATE = "CHECKMATE"
 
 
 
