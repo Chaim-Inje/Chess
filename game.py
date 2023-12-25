@@ -224,20 +224,3 @@ def sqrs_to_str(src: List[int], dst: List[int]):
     return chr(97 + src[1]) + str(src[0] + 1) + chr(97 + dst[1]) + str(dst[0] + 1)
 
 
-def main():
-    pygame.init()
-    pygame.event.set_blocked(None)
-    pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
-    pygame.event.set_allowed(pygame.QUIT)
-    surface_size = (front.square_size * 8 + front.RIGHT_BAR + front.LEFT_BAR, front.square_size * 8 + front.UP_BAR + front.DOWN_BAR)
-    display_surface = pygame.display.set_mode(surface_size)
-    two_players, level = front.Front.start_display()
-    reset = False
-    while True:
-        if reset:
-            two_players, level = front.Front.start_display()
-        game = Game(display_surface, two_players, level)
-        reset = game.game_manager()
-
-
-main()
