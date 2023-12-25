@@ -1,4 +1,5 @@
 import pygame
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BROWN = (120, 65, 0)
@@ -14,6 +15,7 @@ RIGHT_BAR = 200
 DOWN_BAR = 40
 FRAME_SIZE = 20
 LINE_SIZE = 1
+SURFACE_SIZE = (SQUARE_SIZE * 8 + RIGHT_BAR + LEFT_BAR, SQUARE_SIZE * 8 + UP_BAR + DOWN_BAR)
 RESET_BUTTON_LOCATION = (680,100)
 RESET_BUTTON_SIZE = (60,30)
 START_OVER_BUTTON_LOCATION = (680,150)
@@ -28,7 +30,6 @@ PROMOTION_SCREEN_LOCATION = (680,400)
 PHOTO_SIZE = 50
 PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
 RED = (255,0,0)
-
 
 class Front:
     def __init__(self, screen, board):
@@ -164,14 +165,50 @@ class Front:
                         pygame.display.update()
 
     @staticmethod
-    def start_display():
-
-        return True, 10
+    def start_display(surface):
+        surface.fill(BEIGE)
+        font = pygame.font.SysFont('Comic Sans MS', 30)
+        pygame.draw.rect(surface, BROWN, (300,300,270,50))
+        surface.blit(font.render("PLAY_AGAINST:", True, WHITE), (300,300))
+        font = pygame.font.SysFont('Comic Sans MS', 14)
+        pygame.draw.rect(surface, BROWN, (300,400,80,20))
+        surface.blit(font.render("FRIEND", True, WHITE), (300,400))
+        pygame.draw.rect(surface, BROWN, (300,500,80,20))
+        surface.blit(font.render("COMPUTER", True, WHITE), (300,500))
+        pygame.display.update()
+        while True:
+            event = pygame.event.poll()
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                if 300 <= pos[0] < 380 and 400 <= pos[1] < 480:
+                    return True, 1
+                if 300 <= pos[0] < 380 and 500 <= pos[1] < 580:
+                    break
+        surface.fill(BEIGE)
+        font = pygame.font.SysFont('Comic Sans MS', 14)
+        pygame.draw.rect(surface, BROWN, (300,300,80,80))
+        surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), (300,300))
+        for i in range(5):
+            pygame.draw.rect(surface, BROWN, (300,400+50*i,30,30))
+            surface.blit(font.render(f"{i+1}", True, WHITE), (300,400+50*i))
+        pygame.display.update()
+        while True:
+            event = pygame.event.poll()
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                for i in range(5):
+                    if 300 <= pos[0] < 330 and 400+50*i <= pos[1] < 430+50*i:
+                        surface.fill(BEIGE)
+                        return False, i+1
 
     def draw_surface(self, state, turn):
         font = pygame.font.SysFont('Comic Sans MS', 14)
-        self.surface.fill(BLACK)
-        self.surface.fill(BEIGE)
         pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
         self.surface.blit(font.render("RESET", True, WHITE), RESET_BUTTON_LOCATION)
         pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
