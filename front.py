@@ -1,6 +1,7 @@
 import pygame
+black = (0,0,0)
 white = (255, 255, 255)
-black = (120, 65, 0)
+brown = (120, 65, 0)
 yellow = (255, 200, 0)
 darker_yellow = (200, 150, 0)
 square_size = 70
@@ -9,6 +10,7 @@ UP_BAR = 60
 RIGHT_BAR = 120
 DOWN_BAR = 60
 FRAME_SIZE = 20
+LINE_SIZE = 1
 
 class Front:
     def __init__(self, screen, board):
@@ -33,17 +35,19 @@ class Front:
         self.board.insert_piece(piece, src)
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
-        pygame.draw.rect(self.surface,(255,255,255),pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),FRAME_SIZE)
-        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(LEFT_BAR-1,UP_BAR-1,2+8*square_size, 2+8*square_size),1)
-        pygame.draw.rect(self.surface,(0,0,0),pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+10+8*square_size),1)
+        pygame.draw.rect(self.surface,white,pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),FRAME_SIZE)
+        pygame.draw.rect(self.surface,black,pygame.Rect(LEFT_BAR-LINE_SIZE,UP_BAR-LINE_SIZE,LINE_SIZE*2+8*square_size, LINE_SIZE*2+8*square_size),LINE_SIZE)
+        pygame.draw.rect(self.surface,black,pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),LINE_SIZE)
 
-        font = pygame.font.SysFont('Comic Sans MS', 17)
+        num_font = pygame.font.SysFont('Comic Sans MS', 14)
+        letter_font = pygame.font.SysFont('Comic Sans MS', 14)
         for i in range(1, 9):
-            num = font.render(str(9-i), True, (0,0,0))
-            letter = font.render(chr(65+i), True, (0,0,0))
-            self.surface.blit(num, (LEFT_BAR-FRAME_SIZE*3//4,UP_BAR+(i-1+0.4)*square_size))
-            self.surface.blit(num, (LEFT_BAR+8*square_size+FRAME_SIZE//4,UP_BAR+(i-1+0.4)*square_size))
-            self.surface.blit(letter, (LEFT_BAR+i*square_size+square_size/2,UP_BAR+FRAME_SIZE))
+            num = num_font.render(str(9-i), True, black)
+            letter = letter_font.render(chr(64+i), True, black)
+            self.surface.blit(num, (LEFT_BAR-FRAME_SIZE*3//4,UP_BAR+(i-1+0.37)*square_size))
+            self.surface.blit(num, (LEFT_BAR+8*square_size+FRAME_SIZE//4,UP_BAR+(i-1+0.37)*square_size))
+            self.surface.blit(letter, (LEFT_BAR+(i-1)*square_size+square_size*4//9,UP_BAR-(FRAME_SIZE)))
+            self.surface.blit(letter, (LEFT_BAR+(i-1)*square_size+square_size*4//9,UP_BAR+8*square_size))
         if not list_of_squares:
             list_of_squares = []
         for row in range(8):
@@ -56,7 +60,7 @@ class Front:
                 elif (row + col) % 2 == 1:
                     color = white
                 else:
-                    color = black
+                    color = brown
                 pygame.draw.rect(self.surface, color, (col * square_size + LEFT_BAR, (7 - row) * square_size + UP_BAR, square_size, square_size))
                 if [row, col] in list_of_squares:
                     if (row + col) % 2 == 1:
