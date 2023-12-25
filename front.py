@@ -12,16 +12,16 @@ RIGHT_BAR = 200
 DOWN_BAR = 40
 FRAME_SIZE = 20
 LINE_SIZE = 1
-RESET_BUTTON_LOCATION = (0, 0)
-RESET_BUTTON_SIZE = (0, 0)
-START_OVER_BUTTON_LOCATION = (0, 0)
-START_OVER_BUTTON_SIZE = (0, 0)
-SOUND_BUTTON_LOCATION = (0, 0)
-SOUND_BUTTON_SIZE = (0, 0)
-TURN_BAR_LOCATION = (0, 0)
-TURN_BAR_BUTTON_SIZE = (0, 0)
-STATE_BUTTON_LOCATION = (0, 0)
-STATE_BUTTON_SIZE = (0, 0)
+RESET_BUTTON_LOCATION = (1,1)
+RESET_BUTTON_SIZE = (1,1)
+START_OVER_BUTTON_LOCATION = (1,1)
+START_OVER_BUTTON_SIZE = (1,1)
+SOUND_BUTTON_LOCATION = (1,1)
+SOUND_BUTTON_SIZE = (1,1)
+TURN_BAR_LOCATION = (1,1)
+TURN_BAR_SIZE = (1,1)
+STATE_BAR_LOCATION = (1,1)
+STATE_BAR_SIZE = (1,1)
 
 
 
@@ -29,6 +29,22 @@ class Front:
     def __init__(self, screen, board):
         self.surface = screen
         self.board = board
+        font = pygame.font.SysFont('Comic Sans MS', 14)
+        pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE), LINE_SIZE)
+        self.surface.blit(font.render("RESET", True, BLACK), RESET_BUTTON_LOCATION)
+        pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE), LINE_SIZE)
+        self.surface.blit(font.render("START OVER", True, BLACK), RESET_BUTTON_LOCATION)
+        pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE), LINE_SIZE)
+        self.surface.blit(font.render("RESET", True, BLACK), RESET_BUTTON_LOCATION)
+        pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(*TURN_BAR_LOCATION, *TURN_BAR_SIZE), LINE_SIZE)
+        self.surface.blit(font.render("RESET", True, BLACK), RESET_BUTTON_LOCATION)
+        pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(*STATE_BAR_LOCATION, *STATE_BAR_SIZE), LINE_SIZE)
+        self.surface.blit(font.render("RESET", True, BLACK), RESET_BUTTON_LOCATION)
 
     def draw_movement(self, dst, src):
         start_col, start_row = (src[1] + 0.26) * SQUARE_SIZE, (

@@ -205,7 +205,6 @@ class Game:
                         if self.cur_player == pieces.BLACK and not self.two_players:
                             self.front.draw_board(hovered)
                             pygame.display.update()
-                            sleep(1)
                             best_move = self.stockfish.get_best_move()
                             self.move(*str_to_sqrs(best_move))
                     down = None
