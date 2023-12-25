@@ -8,6 +8,7 @@ DARK_YELLOW = (200, 150, 0)
 BEIGE = (202, 167, 124)
 GREEN_WHITE = (100,255,0)
 GREEN_BLACK = (0,255,0)
+RED = (255,0,0)
 SQUARE_SIZE = 70
 LEFT_BAR = 40
 UP_BAR = 40
@@ -24,12 +25,26 @@ SOUND_BUTTON_LOCATION = (680,200)
 SOUND_BUTTON_SIZE = (60,30)
 TURN_BAR_LOCATION = (680,250)
 TURN_BAR_SIZE = (110,30)
+PLAY_AGAINST_LOCATION = (250,200)
+PLAY_AGAINST_SIZE = (270,50)
+FRIEND_BUTTON_LOCATION = (300,400)
+FRIEND_BUTTON_SIZE = (80,20)
+COMPUTER_BUTTON_LOCATION = (300,500)
+COMPUTER_BUTTON_SIZE = (80,20)
+CHOOSE_LEVEL_LOCATION = (300,300)
+CHOOSE_LEVEL_SIZE = (80,80)
+LEVEL_BUTTONS_LOCATION = (300,400)
+LEVEL_BUTTONS_SIZE = (30,30)
+LEVEL_BUTTONS_GAP = 50
+
+
+
+
 STATE_BAR_LOCATION = (680,300)
 STATE_BAR_SIZE = (80,30)
 PROMOTION_SCREEN_LOCATION = (680,400)
 PHOTO_SIZE = 50
 PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
-RED = (255,0,0)
 
 class Front:
     def __init__(self, screen, board):
@@ -168,13 +183,13 @@ class Front:
     def start_display(surface):
         surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 30)
-        pygame.draw.rect(surface, BROWN, (300,300,270,50))
-        surface.blit(font.render("PLAY_AGAINST:", True, WHITE), (300,300))
+        pygame.draw.rect(surface, BROWN, (*PLAY_AGAINST_LOCATION, *PLAY_AGAINST_SIZE))
+        surface.blit(font.render("PLAY_AGAINST:", True, WHITE), PLAY_AGAINST_LOCATION)
         font = pygame.font.SysFont('Comic Sans MS', 14)
-        pygame.draw.rect(surface, BROWN, (300,400,80,20))
-        surface.blit(font.render("FRIEND", True, WHITE), (300,400))
-        pygame.draw.rect(surface, BROWN, (300,500,80,20))
-        surface.blit(font.render("COMPUTER", True, WHITE), (300,500))
+        pygame.draw.rect(surface, BROWN, (*FRIEND_BUTTON_LOCATION, *FRIEND_BUTTON_SIZE))
+        surface.blit(font.render("FRIEND", True, WHITE), FRIEND_BUTTON_LOCATION)
+        pygame.draw.rect(surface, BROWN, (*COMPUTER_BUTTON_LOCATION, *COMPUTER_BUTTON_SIZE))
+        surface.blit(font.render("COMPUTER", True, WHITE), COMPUTER_BUTTON_LOCATION)
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -183,17 +198,19 @@ class Front:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                if 300 <= pos[0] < 380 and 400 <= pos[1] < 480:
+                if (FRIEND_BUTTON_LOCATION[0] <= pos[0] < FRIEND_BUTTON_LOCATION[0]+FRIEND_BUTTON_SIZE[0] and
+                        FRIEND_BUTTON_LOCATION[1] <= pos[1] < FRIEND_BUTTON_LOCATION[1]+FRIEND_BUTTON_SIZE[1]):
                     return True, 1
-                if 300 <= pos[0] < 380 and 500 <= pos[1] < 580:
+                if (COMPUTER_BUTTON_LOCATION[0] <= pos[0] < COMPUTER_BUTTON_LOCATION[0]+COMPUTER_BUTTON_SIZE[0] and
+                        COMPUTER_BUTTON_LOCATION[1] <= pos[1] < COMPUTER_BUTTON_LOCATION[1]+COMPUTER_BUTTON_SIZE[1]):
                     break
         surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
-        pygame.draw.rect(surface, BROWN, (300,300,80,80))
-        surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), (300,300))
+        pygame.draw.rect(surface, BROWN, (*CHOOSE_LEVEL_LOCATION, *CHOOSE_LEVEL_SIZE))
+        surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), CHOOSE_LEVEL_LOCATION)
         for i in range(5):
-            pygame.draw.rect(surface, BROWN, (300,400+50*i,30,30))
-            surface.blit(font.render(f"{i+1}", True, WHITE), (300,400+50*i))
+            pygame.draw.rect(surface, BROWN, (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i, *LEVEL_BUTTONS_SIZE))
+            surface.blit(font.render(f"{i+1}", True, WHITE), (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i))
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -203,7 +220,8 @@ class Front:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 for i in range(5):
-                    if 300 <= pos[0] < 330 and 400+50*i <= pos[1] < 430+50*i:
+                    if (LEVEL_BUTTONS_LOCATION[0] <= pos[0] < LEVEL_BUTTONS_LOCATION[0]+LEVEL_BUTTONS_SIZE[0] and
+                            LEVEL_BUTTONS_LOCATION[1]+50*i <= pos[1] < LEVEL_BUTTONS_LOCATION[1]+LEVEL_BUTTONS_SIZE[1]+50*i):
                         surface.fill(BEIGE)
                         return False, i+1
 
