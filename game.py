@@ -6,7 +6,7 @@ import pygame
 from stockfish import Stockfish
 from time import sleep
 import front
-ALL_GOOD = 0
+ALL_GOOD = "ALL_GOOD"
 CHECK = "CHECK"
 STALEMATE = "STALEMATE"
 CHECKMATE = "CHECKMATE"
