@@ -152,7 +152,16 @@ class Game:
         return self.stalemate(color) and self.threatenings(self.board.white_king() if color else self.board.black_king(), color)
 
     def promotion(self,name:str, color: bool) -> pieces.Pieces:
-        return pieces.Pieces('queen', color)
+        my_str = ''
+        if name == 'q':
+            my_str = 'queen'
+        elif name == 'n':
+            my_str = 'knight'
+        elif name == 'b':
+            my_str = 'bishop'
+        elif name == 'r':
+            my_str = 'rook'
+        return pieces.Pieces(my_str, color)
 
     def game_manager(self):
         square_list = []
@@ -167,7 +176,10 @@ class Game:
                     pygame.display.update()
                 if new_down in [down] + square_list:
                     if new_down != down:
-                        self.move(down, new_down)
+                        string_for_promotion = ''
+                        if self.board[down].name() == 'pawn' and (new_down[0] == 0 or new_down[0] == 7):
+                            string_for_promotion = self.front.get_promoted()
+                        self.move(down, new_down, string_for_promotion)
                         if self.cur_player == pieces.BLACK and not self.two_players:
                             self.front.draw_board(hovered)
                             pygame.display.update()
@@ -183,7 +195,7 @@ class Game:
 
 
 def str_to_sqrs(my_str: str):
-    return [[int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97]]
+    return [[int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97]], '' if len(my_str) < 5 else my_str[4]
 
 
 def sqrs_to_str(src: List[int], dst: List[int]):
