@@ -175,15 +175,15 @@ class Game:
         self.front.draw_board()
         pygame.display.update()
         square_list = []
-        situation = ALL_GOOD
+        state = ALL_GOOD
         while True:
             if self.threatenings(self.board.white_king() if self.cur_player else self.board.black_king(), self.cur_player):
-                situation = CHECK
+                state = CHECK
             elif self.stalemate(self.cur_player):
-                situation = STALEMATE
+                state = STALEMATE
             if self.checkmate(self.cur_player):
-                situation = CHECKMATE
-            self.front.draw_surface(situation, self.cur_player)
+                state = CHECKMATE
+            self.front.draw_surface(state, self.cur_player)
             down, hovered, reset, start_over = self.front.event_manager()
             if reset or start_over:
                 return reset

@@ -1,17 +1,29 @@
 import pygame
-black = (0,0,0)
-white = (255, 255, 255)
-brown = (120, 65, 0)
-yellow = (255, 200, 0)
-darker_yellow = (200, 150, 0)
-beige = (202,167,124)
-square_size = 70
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BROWN = (120, 65, 0)
+YELLOW = (255, 200, 0)
+DARK_YELLOW = (200, 150, 0)
+BEIGE = (202, 167, 124)
+SQUARE_SIZE = 70
 LEFT_BAR = 40
 UP_BAR = 40
 RIGHT_BAR = 200
 DOWN_BAR = 40
 FRAME_SIZE = 20
 LINE_SIZE = 1
+RESET_BUTTON_LOCATION = (0, 0)
+RESET_BUTTON_SIZE = (0, 0)
+START_OVER_BUTTON_LOCATION = (0, 0)
+START_OVER_BUTTON_SIZE = (0, 0)
+SOUND_BUTTON_LOCATION = (0, 0)
+SOUND_BUTTON_SIZE = (0, 0)
+TURN_BAR_LOCATION = (0, 0)
+TURN_BAR_BUTTON_SIZE = (0, 0)
+STATE_BUTTON_LOCATION = (0, 0)
+STATE_BUTTON_SIZE = (0, 0)
+
+
 
 class Front:
     def __init__(self, screen, board):
@@ -19,63 +31,63 @@ class Front:
         self.board = board
 
     def draw_movement(self, dst, src):
-        start_col, start_row = (src[1] + 0.26) * square_size, (
-                src[0] + 0.26) * square_size
-        stop_col, stop_row = (dst[1] + 0.26) * square_size, (
-                dst[0] + 0.26) * square_size
+        start_col, start_row = (src[1] + 0.26) * SQUARE_SIZE, (
+                src[0] + 0.26) * SQUARE_SIZE
+        stop_col, stop_row = (dst[1] + 0.26) * SQUARE_SIZE, (
+                dst[0] + 0.26) * SQUARE_SIZE
         phase_col, phase_row = (stop_col - start_col) / 90, (
                 start_row - stop_row) / 90
         piece = self.board[src]
         self.board.delete_piece(src)
         for i in range(90):
             self.surface.blit(pygame.image.load(piece.path_to_image()), (
-                 (src[1] + 0.26) * square_size + phase_col * i + LEFT_BAR,
-                 (7 - src[0] + 0.26) * square_size + phase_row * i + UP_BAR))
+                (src[1] + 0.26) * SQUARE_SIZE + phase_col * i + LEFT_BAR,
+                (7 - src[0] + 0.26) * SQUARE_SIZE + phase_row * i + UP_BAR))
             pygame.display.update()
             self.draw_board()
         self.board.insert_piece(piece, src)
 
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None):
-        pygame.draw.rect(self.surface,white,pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),FRAME_SIZE)
-        pygame.draw.rect(self.surface,black,pygame.Rect(LEFT_BAR-LINE_SIZE,UP_BAR-LINE_SIZE,LINE_SIZE*2+8*square_size, LINE_SIZE*2+8*square_size),LINE_SIZE)
-        pygame.draw.rect(self.surface,black,pygame.Rect(LEFT_BAR-FRAME_SIZE,UP_BAR-FRAME_SIZE,FRAME_SIZE*2+8*square_size, FRAME_SIZE*2+8*square_size),LINE_SIZE)
+        pygame.draw.rect(self.surface, WHITE, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), FRAME_SIZE)
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - LINE_SIZE, UP_BAR - LINE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
+        pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
 
         num_font = pygame.font.SysFont('Comic Sans MS', 14)
         letter_font = pygame.font.SysFont('Comic Sans MS', 14)
         for i in range(1, 9):
-            num = num_font.render(str(9-i), True, black)
-            letter = letter_font.render(chr(64+i), True, black)
-            self.surface.blit(num, (LEFT_BAR-FRAME_SIZE*3//4,UP_BAR+(i-1+0.37)*square_size))
-            self.surface.blit(num, (LEFT_BAR+8*square_size+FRAME_SIZE//4,UP_BAR+(i-1+0.37)*square_size))
-            self.surface.blit(letter, (LEFT_BAR+(i-1)*square_size+square_size*4//9,UP_BAR-(FRAME_SIZE)))
-            self.surface.blit(letter, (LEFT_BAR+(i-1)*square_size+square_size*4//9,UP_BAR+8*square_size))
+            num = num_font.render(str(9-i), True, BLACK)
+            letter = letter_font.render(chr(64+i), True, BLACK)
+            self.surface.blit(num, (LEFT_BAR - FRAME_SIZE * 3 // 4, UP_BAR + (i-1+0.37) * SQUARE_SIZE))
+            self.surface.blit(num, (LEFT_BAR + 8 * SQUARE_SIZE + FRAME_SIZE // 4, UP_BAR + (i - 1 + 0.37) * SQUARE_SIZE))
+            self.surface.blit(letter, (LEFT_BAR + (i-1) * SQUARE_SIZE + SQUARE_SIZE * 4 // 9, UP_BAR - (FRAME_SIZE)))
+            self.surface.blit(letter, (LEFT_BAR + (i-1) * SQUARE_SIZE + SQUARE_SIZE * 4 // 9, UP_BAR + 8 * SQUARE_SIZE))
         if not list_of_squares:
             list_of_squares = []
         for row in range(8):
             for col in range(8):
 
                 if [row, col] == down_square:
-                    color = darker_yellow
+                    color = DARK_YELLOW
                 elif [row, col] == hovered_square:
-                    color = yellow
+                    color = YELLOW
                 elif (row + col) % 2 == 1:
-                    color = white
+                    color = WHITE
                 else:
-                    color = brown
-                pygame.draw.rect(self.surface, color, (col * square_size + LEFT_BAR, (7 - row) * square_size + UP_BAR, square_size, square_size))
+                    color = BROWN
+                pygame.draw.rect(self.surface, color, (col * SQUARE_SIZE + LEFT_BAR, (7 - row) * SQUARE_SIZE + UP_BAR, SQUARE_SIZE, SQUARE_SIZE))
                 if [row, col] in list_of_squares:
                     if (row + col) % 2 == 1:
                         for i in range(15):
                             pygame.draw.rect(self.surface, (255, 200 + 4 * i - 1, 18 * i),
-                                              pygame.Rect(col * square_size + i + LEFT_BAR, (7 - row) * square_size + i + UP_BAR, square_size - 2 * i, square_size - 2 * i), 1)
+                                             pygame.Rect(col * SQUARE_SIZE + i + LEFT_BAR, (7 - row) * SQUARE_SIZE + i + UP_BAR, SQUARE_SIZE - 2 * i, SQUARE_SIZE - 2 * i), 1)
                     else:
                         for i in range(15):
                             pygame.draw.rect(self.surface, (255 - 10 * i, 200 - 10 * i, 0),
-                                            pygame.Rect(col * square_size + i + LEFT_BAR, (7 - row) * square_size + i + UP_BAR, square_size - 2 * i, square_size - 2 * i), 1)
+                                             pygame.Rect(col * SQUARE_SIZE + i + LEFT_BAR, (7 - row) * SQUARE_SIZE + i + UP_BAR, SQUARE_SIZE - 2 * i, SQUARE_SIZE - 2 * i), 1)
                  # Draw the pieces
                 piece = self.board[[row, col]]
                 if piece is not None:
-                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * square_size + LEFT_BAR, (7 - row + 0.26) * square_size + UP_BAR))
+                    self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * SQUARE_SIZE + LEFT_BAR, (7 - row + 0.26) * SQUARE_SIZE + UP_BAR))
 
     @staticmethod
     def event_manager():
@@ -90,11 +102,11 @@ class Front:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
-            down = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
+            down = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
             # Calculate the row and column of the clicked square
-            hovered = [7 - ((pos[1] - UP_BAR) // square_size), (pos[0] - LEFT_BAR) // square_size]
+            hovered = [7 - ((pos[1] - UP_BAR) // SQUARE_SIZE), (pos[0] - LEFT_BAR) // SQUARE_SIZE]
         return down, hovered, 0,0
 
     def get_promoted(self, color):
@@ -104,5 +116,5 @@ class Front:
     def start_display():
         return False, 10
 
-    def draw_surface(self, situation, turn):
+    def draw_surface(self, state, turn):
         pass
