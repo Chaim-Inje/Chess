@@ -13,6 +13,19 @@ CHECKMATE = "CHECKMATE"
 
 
 class Game:
+    """A class representing a chess game.
+    :param surface: The surface on which the game is displayed.
+    :param two_players: A boolean representing whether the game is played by two players or against the computer.
+    :param level: An integer representing the level of the computer.
+    :attr cur_player: A boolean representing the current player.
+    :attr board: A board object representing the board of the game.
+    :attr surface: The surface on which the game is displayed.
+    :attr castling: A list of the squares of the rooks that can castle.
+    :attr pawn_eat: A list of the squares of destination, source and eaten piece of the pawn en passant move .
+    :attr stockfish: A Stockfish object representing the computer.
+    :attr two_players: A boolean representing whether the game is played by two players or against the computer.
+    :attr front: A Front object representing the front of the game.
+    """
     def __init__(self, surface, two_players=False, level=10):
         self.cur_player: bool = pieces.WHITE
         self.board: board.Board = board.Board()
@@ -45,6 +58,11 @@ class Game:
         self.front = front.Front(surface, self.board)
 
     def move(self, src, dst, promotion: str = ''):
+        """Moves the piece from the source square to the destination square.
+        :param src: A list of two integers representing the source square.
+        :param dst: A list of two integers representing the destination square.
+        :param promotion: A string representing the promotion of the pawn if the move is a pawn promotion.
+        """
         self.front.draw_movement(dst, src)
         if (self.pawn_eat and self.pawn_eat[0][0:2] == (src, dst)) or (len(self.pawn_eat) > 1 and self.pawn_eat[1][0:2] == (src, dst)):
             self.board.delete_piece(self.pawn_eat[0][2] if self.pawn_eat[0][0:2] == (src, dst) else self.pawn_eat[1][2])
@@ -66,6 +84,10 @@ class Game:
         self.stockfish.make_moves_from_current_position([sqrs_to_str(src, dst) + promotion])
 
     def castling_manager(self, dst, src):
+        """Manages the castling.
+        :param dst: A list of two integers representing the destination square.
+        :param src: A list of two integers representing the source square.
+        """
         if src in self.castling:
             self.castling.remove(src)
         elif src == [0, 4]:
@@ -90,6 +112,13 @@ class Game:
             self.board.move_piece([src[0], 0], [src[0], 3])
 
     def is_legal_move(self, src: List[int], dst: List[int]) -> bool:
+        """Checks if the move from the source square to the destination square is legal.
+        note that this function dose not check the moves castling and en passant.
+        those moves are added to return list at possible_moves function.
+        :param src: A list of two integers representing the source square.
+        :param dst: A list of two integers representing the destination square.
+        :return: True if the move is legal, False otherwise.
+        """
         if not self.board[src]:
             return False
         if self.board[src].color() != self.cur_player:
@@ -117,6 +146,11 @@ class Game:
         return legal
 
     def threatenings(self, square: List[int], color: bool) -> List[List[int]]:
+        """Returns a list of the squares that threaten the given square assuming that the king is in the given square.
+        :param square: A list of two integers representing the square.
+        :param color: A boolean representing the color of the king.
+        :return: A list of the squares that threaten the given square.
+        """
         list_of_pos_enemy = self.board.black_pieces() if color else self.board.white_pieces()
         list_of_threatenings = []
         for piece_pos in list_of_pos_enemy:
@@ -126,6 +160,10 @@ class Game:
         return list_of_threatenings
 
     def possible_moves(self, square):
+        """Returns a list of the possible moves of the piece in the given square.
+        :param square: A list of two integers representing the square.
+        :return: A list of the possible moves of the piece in the given square.
+        """
         if self.board[square] is None:
             return []
         my_list = [s for s in (self.board[square].possible_moves(square) + self.board[square].possible_eats(square)) if self.is_legal_move(square, s)]
@@ -149,6 +187,10 @@ class Game:
         return my_list
 
     def stalemate(self, color: bool) -> bool:
+        """Returns True if the given color is in stalemate, False otherwise.
+        :param color: A boolean representing the color.
+        :return: True if the given color is in stalemate, False otherwise.
+        """
         my_list = self.board.white_pieces() if color else self.board.black_pieces()
         for piece in my_list:
             if self.possible_moves(piece):
@@ -156,9 +198,18 @@ class Game:
         return True
 
     def checkmate(self, color: bool) -> bool:
+        """Returns True if the given color is in checkmate, False otherwise.
+        :param color: A boolean representing the color.
+        :return: True if the given color is in checkmate, False otherwise.
+        """
         return self.stalemate(color) and (self.threatenings((self.board.white_king() if color else self.board.black_king()), color))
 
     def promotion(self,name:str, color: bool) -> pieces.Pieces:
+        """Returns a piece object of the given name and color.
+        :param name: A string representing the name of the piece.
+        :param color: A boolean representing the color of the piece.
+        :return: A piece object of the given name and color.
+        """
         my_str = ''
         if name == 'q':
             my_str = 'queen'
@@ -171,6 +222,9 @@ class Game:
         return pieces.Pieces(my_str, color)
 
     def game_manager(self):
+        """Manages the game.
+        :return: True if the game is reset, False otherwise.
+        """
         self.front.draw_board()
         pygame.display.update()
         square_list = []
@@ -219,10 +273,21 @@ class Game:
 
 
 def str_to_sqrs(my_str: str):
+    """Returns a tuple of two lists of two integers representing the source and destination squares of the given string and the promotion of the pawn
+    (in the format of stockfish).
+    :param my_str: A string representing the move.
+    :return: A tuple of two lists of two integers representing the source and destination squares of the given string and the promotion of the pawn
+    (in the format of stockfish).
+    """
     return [int(my_str[1]) - 1, ord(my_str[0]) - 97], [int(my_str[3]) - 1, ord(my_str[2]) - 97], '' if len(my_str) < 5 else my_str[4]
 
 
 def sqrs_to_str(src: List[int], dst: List[int]):
+    """Returns a string representing the move from the source square to the destination square.
+    :param src: A list of two integers representing the source square.
+    :param dst: A list of two integers representing the destination square.
+    :return: A string representing the move from the source square to the destination square.
+    """
     return chr(97 + src[1]) + str(src[0] + 1) + chr(97 + dst[1]) + str(dst[0] + 1)
 
 

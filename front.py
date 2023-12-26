@@ -47,6 +47,7 @@ PHOTO_SIZE = 50
 PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
 
 class Front:
+    """This class is responsible for the front end of the game"""
     def __init__(self, screen, board):
         self.surface = screen
         self.board = board
@@ -55,6 +56,9 @@ class Front:
         self.eating_sound = pygame.mixer.Sound('sounds/eat.wav')
         self.moving_sound = pygame.mixer.Sound('sounds/move.wav')
     def draw_movement(self, dst, src):
+        """
+        This function draws the movement of a piece from src to dst
+        """
         start_col, start_row = (src[1] + 0.26) * SQUARE_SIZE, (
                 src[0] + 0.26) * SQUARE_SIZE
         stop_col, stop_row = (dst[1] + 0.26) * SQUARE_SIZE, (
@@ -75,8 +79,14 @@ class Front:
             self.draw_board()
         self.board.insert_piece(piece, src)
 
-
     def draw_board(self, hovered_square=None, down_square=None, list_of_squares=None, src_and_dst=None):
+        """
+        This function draws the board
+        :param hovered_square: The square that the mouse is hovering over
+        :param down_square: The square that the mouse is pressing down
+        :param list_of_squares: A list of squares that should be marked as possible moves
+        :param src_and_dst: A list of squares that represent the source and destination of the last move
+        """
         pygame.draw.rect(self.surface, WHITE, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), FRAME_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - LINE_SIZE, UP_BAR - LINE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
@@ -123,6 +133,11 @@ class Front:
                     self.surface.blit(pygame.image.load(piece.path_to_image()), ((col + 0.26) * SQUARE_SIZE + LEFT_BAR, (7 - row + 0.26) * SQUARE_SIZE + UP_BAR))
 
     def event_manager(self):
+        """
+        This function manages the events of the game
+        :return: A tuple of the square that the mouse is pressing down, the square that the mouse is hovering over,
+        a boolean that indicates if the reset button was pressed and a boolean that indicates if the start over button was pressed
+        """
         hovered = None
         down = None
         reset = False
@@ -144,10 +159,6 @@ class Front:
                 elif START_OVER_BUTTON_LOCATION[0] <= pos[0] < START_OVER_BUTTON_LOCATION[0] + START_OVER_BUTTON_SIZE[0] and START_OVER_BUTTON_LOCATION[1] <= pos[1] < START_OVER_BUTTON_LOCATION[1]+START_OVER_BUTTON_SIZE[1]:
                     start_over = True
                 elif SOUND_BUTTON_LOCATION[0] <= pos[0] < SOUND_BUTTON_LOCATION[0] + SOUND_BUTTON_SIZE[0] and SOUND_BUTTON_LOCATION[1] <= pos[1] < SOUND_BUTTON_LOCATION[1]+SOUND_BUTTON_SIZE[1]:
-                    # if self.music:
-                    #     pygame.mixer.pause()
-                    # else:
-                    #     pygame.mixer.unpause()
                     self.music = not self.music
         if pygame.mouse.get_focused():
             pos = pygame.mouse.get_pos()
@@ -158,6 +169,11 @@ class Front:
         return down, hovered, reset, start_over
 
     def get_promoted(self, color):
+        """
+        This function displays the promotion screen and returns the piece that the user chose
+        :param color: The color of the pawn that is being promoted
+        :return: The piece that the user chose
+        """
         pygame.draw.rect(self.surface, WHITE, (*PROMOTION_SCREEN_LOCATION, *PROMOTION_SCREEN_SIZE))
         font = pygame.font.SysFont('Comic Sans MS', 14)
         self.surface.blit(font.render("CHOOSE PIECE", True, BLACK), (PROMOTION_SCREEN_LOCATION[0],PROMOTION_SCREEN_LOCATION[1]-20))
@@ -172,19 +188,12 @@ class Front:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
-                    #self.surface.fill(BEIGE)
                     return 'q'
                 elif PROMOTION_SCREEN_LOCATION[0]+ PHOTO_SIZE <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
-                    #self.surface.fill(BEIGE)
-
                     return 'r'
                 elif PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + 2*PHOTO_SIZE:
-                    #self.surface.fill(BEIGE)
-
                     return 'n'
                 elif PROMOTION_SCREEN_LOCATION[0] + PHOTO_SIZE<= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE*2:
-                    #self.surface.fill(BEIGE)
-
                     return 'b'
                 else:
                     for i in range(901):
@@ -195,6 +204,11 @@ class Front:
 
     @staticmethod
     def start_display(surface):
+        """
+        This function displays the start screen and returns the game mode and the level
+        :param surface: The surface to display the start screen on
+        :return: A tuple of the game mode and the level
+        """
         surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 30)
         pygame.draw.rect(surface, BROWN, (*PLAY_AGAINST_LOCATION, *PLAY_AGAINST_SIZE))
@@ -238,9 +252,14 @@ class Front:
                     if (LEVEL_BUTTONS_LOCATION[0] <= pos[0] < LEVEL_BUTTONS_LOCATION[0]+LEVEL_BUTTONS_SIZE[0] and
                             LEVEL_BUTTONS_LOCATION[1]+50*i <= pos[1] < LEVEL_BUTTONS_LOCATION[1]+LEVEL_BUTTONS_SIZE[1]+50*i):
                         surface.fill(BEIGE)
-                        return False, i+1
+                        return False, i
 
     def draw_surface(self, state, turn):
+        """
+        This function draws the surface
+        :param state: The state of the game (check, checkmate, tie or normal)
+        :param turn: The color of the player that is playing
+        """
         self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
         pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
