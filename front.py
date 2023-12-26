@@ -278,3 +278,4 @@ class Front:
         self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+3, TURN_BAR_LOCATION[1]+4))
         # pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
         self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+2, STATE_BAR_LOCATION[1]+3))
+
