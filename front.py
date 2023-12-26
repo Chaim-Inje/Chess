@@ -172,12 +172,19 @@ class Front:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
+                    #self.surface.fill(BEIGE)
                     return 'q'
                 elif PROMOTION_SCREEN_LOCATION[0]+ PHOTO_SIZE <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
+                    #self.surface.fill(BEIGE)
+
                     return 'r'
                 elif PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + 2*PHOTO_SIZE:
+                    #self.surface.fill(BEIGE)
+
                     return 'n'
                 elif PROMOTION_SCREEN_LOCATION[0] + PHOTO_SIZE<= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE*2 and PROMOTION_SCREEN_LOCATION[1]+PHOTO_SIZE <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE*2:
+                    #self.surface.fill(BEIGE)
+
                     return 'b'
                 else:
                     for i in range(901):
@@ -234,6 +241,7 @@ class Front:
                         return False, i+1
 
     def draw_surface(self, state, turn):
+        self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
         pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
         self.surface.blit(font.render("RESET", True, WHITE), RESET_BUTTON_LOCATION)

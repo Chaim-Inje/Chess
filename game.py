@@ -4,7 +4,6 @@ from typing import List
 from typing import Optional
 import pygame
 from stockfish import Stockfish
-from time import sleep
 import front
 ALL_GOOD = "ALL_GOOD"
 CHECK = "CHECK"
@@ -151,14 +150,10 @@ class Game:
 
     def stalemate(self, color: bool) -> bool:
         my_list = self.board.white_pieces() if color else self.board.black_pieces()
-        for piece in (my_list):
+        for piece in my_list:
             if self.possible_moves(piece):
-                break
-        else:
-            # print('uuu')
-            # print(self.board.white_pieces() if color else self.board.black_pieces())
-            return True
-        return False
+                return False
+        return True
 
     def checkmate(self, color: bool) -> bool:
         return self.stalemate(color) and (self.threatenings((self.board.white_king() if color else self.board.black_king()), color))

@@ -100,10 +100,10 @@ class Board:
         return self.__white_king
 
     def black_pieces(self) -> List[List[int]]:
-        return self.__black_and_white_pieces[pieces.BLACK]
+        return self.__black_and_white_pieces[pieces.BLACK][:]
 
     def white_pieces(self) -> List[List[int]]:
-        return self.__black_and_white_pieces[pieces.WHITE]
+        return self.__black_and_white_pieces[pieces.WHITE][:]
 
 
 
