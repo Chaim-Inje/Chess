@@ -42,7 +42,7 @@ LEVEL_BUTTONS_GAP = 31
 
 STATE_BAR_LOCATION = (643,261)
 STATE_BAR_SIZE = (114,32)
-PROMOTION_SCREEN_LOCATION = (680,400)
+PROMOTION_SCREEN_LOCATION = (660,320)
 PHOTO_SIZE = 50
 PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
 
@@ -187,7 +187,10 @@ class Front:
         pygame.display.update()
         while True:
             event = pygame.event.poll()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if PROMOTION_SCREEN_LOCATION[0] <= pos[0] < PROMOTION_SCREEN_LOCATION[0] +PHOTO_SIZE and PROMOTION_SCREEN_LOCATION[1] <= pos[1] < PROMOTION_SCREEN_LOCATION[1] + PHOTO_SIZE:
                     return 'q'
