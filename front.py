@@ -273,9 +273,9 @@ class Front:
         # pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
         self.surface.blit(font.render("START OVER", True, BLACK), (START_OVER_BUTTON_LOCATION[0]+14, START_OVER_BUTTON_LOCATION[1]+2))
         # pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
-        self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+15, SOUND_BUTTON_LOCATION[1]+2))
+        self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+15, SOUND_BUTTON_LOCATION[1]+4))
         # pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
-        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+17, TURN_BAR_LOCATION[1]+4))
+        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+17, TURN_BAR_LOCATION[1]+6))
         # pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
-        self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+16, STATE_BAR_LOCATION[1]+3))
+        self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+16, STATE_BAR_LOCATION[1]+4))
 
