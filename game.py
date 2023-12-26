@@ -262,6 +262,10 @@ class Game:
                             self.front.draw_board(hovered,src_and_dst=src_and_dst)
                             pygame.display.update()
                             best_move = self.stockfish.get_best_move()
+                            if not best_move:
+                                down = None
+                                square_list = []
+                                continue
                             self.move(*str_to_sqrs(best_move))
                             src_and_dst = list(str_to_sqrs(best_move)[0:2])
                     down = None
