@@ -1,11 +1,11 @@
 import pygame
 
 BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+WHITE = (255,255,255)
 BROWN = (120, 65, 0)
 YELLOW = (255, 200, 0)
 DARK_YELLOW = (200, 150, 0)
-BEIGE = (202, 167, 124)
+BEIGE = (217,190,172)
 GREEN_WHITE = (100,255,0)
 GREEN_BLACK = (0,255,0)
 RED = (255,0,0)
@@ -17,31 +17,31 @@ DOWN_BAR = 40
 FRAME_SIZE = 20
 LINE_SIZE = 1
 SURFACE_SIZE = (SQUARE_SIZE * 8 + RIGHT_BAR + LEFT_BAR, SQUARE_SIZE * 8 + UP_BAR + DOWN_BAR)
-RESET_BUTTON_LOCATION = (680,100)
-RESET_BUTTON_SIZE = (60,30)
-START_OVER_BUTTON_LOCATION = (680,150)
-START_OVER_BUTTON_SIZE = (110,30)
-SOUND_BUTTON_LOCATION = (680,200)
-SOUND_BUTTON_SIZE = (60,30)
-TURN_BAR_LOCATION = (680,250)
-TURN_BAR_SIZE = (110,30)
+RESET_BUTTON_LOCATION = (652,511)
+RESET_BUTTON_SIZE = (93,26)
+START_OVER_BUTTON_LOCATION = (652,473)
+START_OVER_BUTTON_SIZE = (92,25)
+SOUND_BUTTON_LOCATION = (671,427)
+SOUND_BUTTON_SIZE = (53,30)
+TURN_BAR_LOCATION = (644,203)
+TURN_BAR_SIZE = (112,34)
 PLAY_AGAINST_LOCATION = (250,200)
 PLAY_AGAINST_SIZE = (270,50)
-FRIEND_BUTTON_LOCATION = (330,320)
-FRIEND_BUTTON_SIZE = (100,40)
-COMPUTER_BUTTON_LOCATION = (330,420)
-COMPUTER_BUTTON_SIZE = (100,40)
+FRIEND_BUTTON_LOCATION = (280,409)
+FRIEND_BUTTON_SIZE = (107,28)
+COMPUTER_BUTTON_LOCATION = (413,409)
+COMPUTER_BUTTON_SIZE = (108,29)
 CHOOSE_LEVEL_LOCATION = (300,200)
 CHOOSE_LEVEL_SIZE = (170,35)
-LEVEL_BUTTONS_LOCATION = (370,280)
-LEVEL_BUTTONS_SIZE = (30,30)
-LEVEL_BUTTONS_GAP = 50
+LEVEL_BUTTONS_LOCATION = (227,405)
+LEVEL_BUTTONS_SIZE = (43,29)
+LEVEL_BUTTONS_GAP = 31
 
 
 
 
-STATE_BAR_LOCATION = (680,300)
-STATE_BAR_SIZE = (100,30)
+STATE_BAR_LOCATION = (643,261)
+STATE_BAR_SIZE = (114,32)
 PROMOTION_SCREEN_LOCATION = (680,400)
 PHOTO_SIZE = 50
 PROMOTION_SCREEN_SIZE = (PHOTO_SIZE*2,PHOTO_SIZE*2)
@@ -88,6 +88,7 @@ class Front:
         :param src_and_dst: A list of squares that represent the source and destination of the last move
         """
         pygame.draw.rect(self.surface, WHITE, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), FRAME_SIZE)
+        pygame.draw.rect(self.surface, BEIGE, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), FRAME_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - LINE_SIZE, UP_BAR - LINE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE, LINE_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
         pygame.draw.rect(self.surface, BLACK, pygame.Rect(LEFT_BAR - FRAME_SIZE, UP_BAR - FRAME_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE, FRAME_SIZE * 2 + 8 * SQUARE_SIZE), LINE_SIZE)
 
@@ -114,14 +115,14 @@ class Front:
                 elif [row,col] in src_and_dst:
                     color = GREEN_WHITE if (row+col)%2 else GREEN_BLACK
                 elif (row + col) % 2 == 1:
-                    color = WHITE
+                    color = BEIGE
                 else:
                     color = BROWN
                 pygame.draw.rect(self.surface, color, (col * SQUARE_SIZE + LEFT_BAR, (7 - row) * SQUARE_SIZE + UP_BAR, SQUARE_SIZE, SQUARE_SIZE))
                 if [row, col] in list_of_squares:
-                    if (row + col) % 2 == 1:
+                    if (row + col) % 2 == 1: # (217,190,172)
                         for i in range(15):
-                            pygame.draw.rect(self.surface, (255, 200 + 4 * i - 1, 18 * i),
+                            pygame.draw.rect(self.surface, (255-3*i, 200 - i, 12 * i),
                                              pygame.Rect(col * SQUARE_SIZE + i + LEFT_BAR, (7 - row) * SQUARE_SIZE + i + UP_BAR, SQUARE_SIZE - 2 * i, SQUARE_SIZE - 2 * i), 1)
                     else:
                         for i in range(15):
@@ -175,6 +176,7 @@ class Front:
         :return: The piece that the user chose
         """
         pygame.draw.rect(self.surface, WHITE, (*PROMOTION_SCREEN_LOCATION, *PROMOTION_SCREEN_SIZE))
+        pygame.draw.rect(self.surface, BEIGE, (*PROMOTION_SCREEN_LOCATION, *PROMOTION_SCREEN_SIZE))
         font = pygame.font.SysFont('Comic Sans MS', 14)
         self.surface.blit(font.render("CHOOSE PIECE", True, BLACK), (PROMOTION_SCREEN_LOCATION[0],PROMOTION_SCREEN_LOCATION[1]-20))
         space = 10
@@ -197,7 +199,7 @@ class Front:
                     return 'b'
                 else:
                     for i in range(901):
-                        pygame.draw.rect(self.surface, RED if i != 900 else WHITE, pygame.Rect(PROMOTION_SCREEN_LOCATION[0], PROMOTION_SCREEN_LOCATION[1], PROMOTION_SCREEN_SIZE[0],PROMOTION_SCREEN_SIZE[1]), 5)
+                        pygame.draw.rect(self.surface, RED if i != 900 else BEIGE, pygame.Rect(PROMOTION_SCREEN_LOCATION[0], PROMOTION_SCREEN_LOCATION[1], PROMOTION_SCREEN_SIZE[0],PROMOTION_SCREEN_SIZE[1]), 5)
                         if self.music:
                             self.warning_sound.play()
                         pygame.display.update()
@@ -209,15 +211,15 @@ class Front:
         :param surface: The surface to display the start screen on
         :return: A tuple of the game mode and the level
         """
-        surface.fill(BEIGE)
-        font = pygame.font.SysFont('Comic Sans MS', 30)
-        pygame.draw.rect(surface, BROWN, (*PLAY_AGAINST_LOCATION, *PLAY_AGAINST_SIZE))
-        surface.blit(font.render("PLAY_AGAINST:", True, WHITE), PLAY_AGAINST_LOCATION)
-        font = pygame.font.SysFont('Comic Sans MS', 14)
-        pygame.draw.rect(surface, BROWN, (*FRIEND_BUTTON_LOCATION, *FRIEND_BUTTON_SIZE))
-        surface.blit(font.render("FRIEND", True, WHITE), FRIEND_BUTTON_LOCATION)
-        pygame.draw.rect(surface, BROWN, (*COMPUTER_BUTTON_LOCATION, *COMPUTER_BUTTON_SIZE))
-        surface.blit(font.render("COMPUTER", True, WHITE), COMPUTER_BUTTON_LOCATION)
+        surface.blit(pygame.image.load("images/start display.jpg"), (0,0))
+        # font = pygame.font.SysFont('Comic Sans MS', 30)
+        # pygame.draw.rect(surface, BROWN, (*PLAY_AGAINST_LOCATION, *PLAY_AGAINST_SIZE))
+        # surface.blit(font.render("PLAY_AGAINST:", True, WHITE), PLAY_AGAINST_LOCATION)
+        # font = pygame.font.SysFont('Comic Sans MS', 14)
+        # pygame.draw.rect(surface, BROWN, (*FRIEND_BUTTON_LOCATION, *FRIEND_BUTTON_SIZE))
+        # surface.blit(font.render("FRIEND", True, WHITE), FRIEND_BUTTON_LOCATION)
+        # pygame.draw.rect(surface, BROWN, (*COMPUTER_BUTTON_LOCATION, *COMPUTER_BUTTON_SIZE))
+        # surface.blit(font.render("COMPUTER", True, WHITE), COMPUTER_BUTTON_LOCATION)
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -225,6 +227,7 @@ class Front:
                 pygame.quit()
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+
                 pos = pygame.mouse.get_pos()
                 if (FRIEND_BUTTON_LOCATION[0] <= pos[0] < FRIEND_BUTTON_LOCATION[0]+FRIEND_BUTTON_SIZE[0] and
                         FRIEND_BUTTON_LOCATION[1] <= pos[1] < FRIEND_BUTTON_LOCATION[1]+FRIEND_BUTTON_SIZE[1]):
@@ -232,14 +235,14 @@ class Front:
                 if (COMPUTER_BUTTON_LOCATION[0] <= pos[0] < COMPUTER_BUTTON_LOCATION[0]+COMPUTER_BUTTON_SIZE[0] and
                         COMPUTER_BUTTON_LOCATION[1] <= pos[1] < COMPUTER_BUTTON_LOCATION[1]+COMPUTER_BUTTON_SIZE[1]):
                     break
-        surface.fill(BEIGE)
-        font = pygame.font.SysFont('Comic Sans MS', 20)
-        pygame.draw.rect(surface, BROWN, (*CHOOSE_LEVEL_LOCATION, *CHOOSE_LEVEL_SIZE))
-        surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), CHOOSE_LEVEL_LOCATION)
-        font = pygame.font.SysFont('Comic Sans MS', 14)
-        for i in range(5):
-            pygame.draw.rect(surface, BROWN, (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i, *LEVEL_BUTTONS_SIZE))
-            surface.blit(font.render(f"{i+1}", True, WHITE), (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i))
+        surface.blit(pygame.image.load("images/choose level.jpg"), (0,0))
+        # font = pygame.font.SysFont('Comic Sans MS', 20)
+        # pygame.draw.rect(surface, BROWN, (*CHOOSE_LEVEL_LOCATION, *CHOOSE_LEVEL_SIZE))
+        # surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), CHOOSE_LEVEL_LOCATION)
+        # font = pygame.font.SysFont('Comic Sans MS', 14)
+        # for i in range(5):
+        #     pygame.draw.rect(surface, BROWN, (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i, *LEVEL_BUTTONS_SIZE))
+        #     surface.blit(font.render(f"{i+1}", True, WHITE), (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i))
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -248,9 +251,10 @@ class Front:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
+                print(pos)
                 for i in range(5):
-                    if (LEVEL_BUTTONS_LOCATION[0] <= pos[0] < LEVEL_BUTTONS_LOCATION[0]+LEVEL_BUTTONS_SIZE[0] and
-                            LEVEL_BUTTONS_LOCATION[1]+50*i <= pos[1] < LEVEL_BUTTONS_LOCATION[1]+LEVEL_BUTTONS_SIZE[1]+50*i):
+                    if (LEVEL_BUTTONS_LOCATION[0]+(LEVEL_BUTTONS_SIZE[0]+LEVEL_BUTTONS_GAP)*i <= pos[0] < LEVEL_BUTTONS_LOCATION[0]+LEVEL_BUTTONS_SIZE[0]*(i+1)+LEVEL_BUTTONS_GAP*i and
+                            LEVEL_BUTTONS_LOCATION[1] <= pos[1] < LEVEL_BUTTONS_LOCATION[1]+LEVEL_BUTTONS_SIZE[1]):
                         surface.fill(BEIGE)
                         return False, i
 
@@ -261,14 +265,16 @@ class Front:
         :param turn: The color of the player that is playing
         """
         self.surface.fill(BEIGE)
+        self.surface.blit(pygame.image.load("images/game display.jpg"), (0,0))
+        # self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
-        pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
-        self.surface.blit(font.render("RESET", True, WHITE), RESET_BUTTON_LOCATION)
-        pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
-        self.surface.blit(font.render("START OVER", True, WHITE), START_OVER_BUTTON_LOCATION)
-        pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
-        self.surface.blit(font.render("SOUND", True, WHITE), SOUND_BUTTON_LOCATION)
-        pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
-        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, WHITE), TURN_BAR_LOCATION)
-        pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
-        self.surface.blit(font.render(f"{state}", True, WHITE), STATE_BAR_LOCATION)
+        # pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
+        self.surface.blit(font.render("RESET", True, BLACK), (RESET_BUTTON_LOCATION[0]+20, RESET_BUTTON_LOCATION[1]+2))
+        # pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
+        self.surface.blit(font.render("START OVER", True, BLACK), (START_OVER_BUTTON_LOCATION[0], START_OVER_BUTTON_LOCATION[1]+2))
+        # pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
+        self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+1, SOUND_BUTTON_LOCATION[1]+2))
+        # pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
+        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+3, TURN_BAR_LOCATION[1]+4))
+        # pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
+        self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+2, STATE_BAR_LOCATION[1]+3))
