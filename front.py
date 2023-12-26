@@ -251,7 +251,7 @@ class Front:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(pos)
+                # print(pos)
                 for i in range(5):
                     if (LEVEL_BUTTONS_LOCATION[0]+(LEVEL_BUTTONS_SIZE[0]+LEVEL_BUTTONS_GAP)*i <= pos[0] < LEVEL_BUTTONS_LOCATION[0]+LEVEL_BUTTONS_SIZE[0]*(i+1)+LEVEL_BUTTONS_GAP*i and
                             LEVEL_BUTTONS_LOCATION[1] <= pos[1] < LEVEL_BUTTONS_LOCATION[1]+LEVEL_BUTTONS_SIZE[1]):
@@ -269,13 +269,13 @@ class Front:
         # self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
         # pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
-        self.surface.blit(font.render("RESET", True, BLACK), (RESET_BUTTON_LOCATION[0]+20, RESET_BUTTON_LOCATION[1]+2))
+        self.surface.blit(font.render("RESET", True, BLACK), (RESET_BUTTON_LOCATION[0]+34, RESET_BUTTON_LOCATION[1]+2))
         # pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
-        self.surface.blit(font.render("START OVER", True, BLACK), (START_OVER_BUTTON_LOCATION[0], START_OVER_BUTTON_LOCATION[1]+2))
+        self.surface.blit(font.render("START OVER", True, BLACK), (START_OVER_BUTTON_LOCATION[0]+14, START_OVER_BUTTON_LOCATION[1]+2))
         # pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
-        self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+1, SOUND_BUTTON_LOCATION[1]+2))
+        self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+15, SOUND_BUTTON_LOCATION[1]+2))
         # pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
-        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+3, TURN_BAR_LOCATION[1]+4))
+        self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+17, TURN_BAR_LOCATION[1]+4))
         # pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
-        self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+2, STATE_BAR_LOCATION[1]+3))
+        self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+16, STATE_BAR_LOCATION[1]+3))
 
