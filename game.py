@@ -9,6 +9,18 @@ ALL_GOOD = "ALL_GOOD"
 CHECK = "CHECK"
 STALEMATE = "STALEMATE"
 CHECKMATE = "CHECKMATE"
+import os
+import platform
+
+def get_stockfish_path():
+    if platform.system() == 'Linux':
+        filename = 'stockfish-ubuntu-x86-64-avx2'
+    elif platform.system() == 'Windows':
+        filename = 'stockfish-windows-x86-64-avx2.exe'
+    else:
+        raise Exception('The project dose not support this OS')
+    return os.path.join(os.getcwd(), filename)
+
 
 
 
@@ -52,7 +64,7 @@ class Game:
         self.surface = surface
         self.castling = [[0, 0], [0, 7], [7, 0], [7, 7]]
         self.pawn_eat = []
-        self.stockfish = Stockfish(path="stockfish-windows-x86-64-avx2.exe")
+        self.stockfish = Stockfish(path=get_stockfish_path())
         self.stockfish.set_skill_level(level)
         self.two_players = two_players
         self.front = front.Front(surface, self.board)

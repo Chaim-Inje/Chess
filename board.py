@@ -2,7 +2,6 @@ from typing import Optional
 from typing import List
 import pieces
 
-
 class Board:
     """A class to represent a chess board.
     === Private Attributes ===
