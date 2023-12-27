@@ -5,12 +5,13 @@ from typing import Optional
 import pygame
 from stockfish import Stockfish
 import front
+import os
+import platform
 ALL_GOOD = "ALL_GOOD"
 CHECK = "CHECK"
 STALEMATE = "STALEMATE"
 CHECKMATE = "CHECKMATE"
-import os
-import platform
+
 
 def get_stockfish_path():
     """Returns the path of the stockfish executable.
