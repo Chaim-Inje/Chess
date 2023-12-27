@@ -1,6 +1,3 @@
-# Hi! welcome to our project. Here is our first step toward changing the world!
-# Authors: Chaim Ingi & Jack Wolman
-# Enjoy!
 # Chess Project
 
 Welcome to our Chess project! This is a collaborative project where we've implemented a playable chess game.
