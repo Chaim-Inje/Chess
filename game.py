@@ -13,6 +13,11 @@ import os
 import platform
 
 def get_stockfish_path():
+    """Returns the path of the stockfish executable.
+    raise Exception if the project dose not support the OS.
+    the project support Linux and Windows.
+    :return: The path of the stockfish executable.
+    """
     if platform.system() == 'Linux':
         filename = 'stockfish-ubuntu-x86-64-avx2'
     elif platform.system() == 'Windows':
