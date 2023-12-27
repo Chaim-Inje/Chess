@@ -22,7 +22,7 @@ To get started with this project, clone the repository and follow the instructio
 
 ## Installation
 
-*Details about how to install and run your project go here*
+*This section will be added soon*
 
 ## Contributing
 
