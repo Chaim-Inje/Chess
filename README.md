@@ -8,8 +8,6 @@ This project was created by Chaim Inje and Jack Wolman.
 
 ## Features
 
-- **Play against the computer**: You can play against a computer opponent that uses the Stockfish chess engine to generate its moves.
-
 ## Usage of Stockfish
 
 This project uses the Stockfish chess engine for generating computer opponent moves. Please note that Stockfish is only used for move generation and does not influence other aspects of the game.
