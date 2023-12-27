@@ -7,6 +7,7 @@ from stockfish import Stockfish
 import front
 import os
 import platform
+
 ALL_GOOD = "ALL_GOOD"
 CHECK = "CHECK"
 STALEMATE = "STALEMATE"
