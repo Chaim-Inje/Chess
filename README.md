@@ -1,6 +1,8 @@
 # Chess Game Project
 
-Welcome to our Chess Game Project! This game is a labor of love by Jacob Wolman and Chaim Inje. 
+Welcome to our Chess Game Project! This game is a labor of love by [Jacob Wolman](https://www.linkedin.com/in/jacob-wolman-084277287/) and [Chaim Inje](https://www.linkedin.com/in/chaim-inje/). 
+
+
 
 ## About the Game
 
