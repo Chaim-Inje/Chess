@@ -34,7 +34,7 @@ A Python-based chess game that works on Linux and Windows.
 
 1. **Clone the Repository**
 
-git clone https://github.com/Chaim-Inje/Chess.git
+''git clone https://github.com/Chaim-Inje/Chess.git''
 
 
 2. **Navigate to the Directory**
