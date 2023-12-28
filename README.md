@@ -54,7 +54,7 @@ Note that this project is a Python-based chess game that works on Linux and Wind
    python main.py
    ```
 
-be aware to the exact version installed on your computer.
+be aware to the exact version installed on your computer. 
 If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
 Enjoy your game!
 
