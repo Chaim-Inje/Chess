@@ -32,34 +32,41 @@ A Python-based chess game that works on Linux and Windows.
 
 ## Instructions to Run the Program
 
+```markdown
+# Chess
+
+A Python-based chess game that works on Linux and Windows.
+
+## Instructions to Run the Program
+
 1. **Clone the Repository**
-
-''''git clone https://github.com/Chaim-Inje/Chess.git''''
-
+   ```
+   git clone https://github.com/Chaim-Inje/Chess.git
+   ```
 
 2. **Navigate to the Directory**
-
-cd Chess
-
+   ```
+   cd Chess
+   ```
 
 3. **Install Dependencies**
-
-pip install pygame typing stockfish
-
+   ```
+   pip install pygame typing stockfish
+   ```
 
 4. **Grant Execute Permissions**
-
-chmod +x /home/chaimingi/Chess/stockfish-ubuntu-x86-64-avx2
-
+   ```
+   chmod +x /home/chaimingi/Chess/stockfish-ubuntu-x86-64-avx2
+   ```
 
 5. **Run the Program**
-
-python main.py
-
+   ```
+   python main.py
+   ```
 
 If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
-
-## Contributing
+```
+I hope this helps! Let me know if you have any other questions.## Contributing
 
 Contributions are welcome! Please read the contributing guide for details.
 
