@@ -55,6 +55,7 @@ Note that this project is a Python-based chess game that works on Linux and Wind
    ```
 
 You might need to omit '3' from the command (python main.py).
+
 If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
 Enjoy your game!
 
