@@ -58,6 +58,6 @@ If you encounter any issues, they might be related to permissions or your Python
 ```
 Enjoy your game!
 
-## License
+# License
 
-This project is licensed under the *your license* - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE.md file for details
