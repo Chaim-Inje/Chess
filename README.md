@@ -32,13 +32,6 @@ A Python-based chess game that works on Linux and Windows.
 
 ## Instructions to Run the Program
 
-```markdown
-# Chess
-
-A Python-based chess game that works on Linux and Windows.
-
-## Instructions to Run the Program
-
 1. **Clone the Repository**
    ```
    git clone https://github.com/Chaim-Inje/Chess.git
