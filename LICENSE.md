@@ -1,5 +1,4 @@
 # License
-GNU
 
 ## Chess
 
