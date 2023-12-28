@@ -214,14 +214,6 @@ class Front:
         :return: A tuple of the game mode and the level
         """
         surface.blit(pygame.image.load("images/start display.jpg"), (0,0))
-        # font = pygame.font.SysFont('Comic Sans MS', 30)
-        # pygame.draw.rect(surface, BROWN, (*PLAY_AGAINST_LOCATION, *PLAY_AGAINST_SIZE))
-        # surface.blit(font.render("PLAY_AGAINST:", True, WHITE), PLAY_AGAINST_LOCATION)
-        # font = pygame.font.SysFont('Comic Sans MS', 14)
-        # pygame.draw.rect(surface, BROWN, (*FRIEND_BUTTON_LOCATION, *FRIEND_BUTTON_SIZE))
-        # surface.blit(font.render("FRIEND", True, WHITE), FRIEND_BUTTON_LOCATION)
-        # pygame.draw.rect(surface, BROWN, (*COMPUTER_BUTTON_LOCATION, *COMPUTER_BUTTON_SIZE))
-        # surface.blit(font.render("COMPUTER", True, WHITE), COMPUTER_BUTTON_LOCATION)
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -238,13 +230,6 @@ class Front:
                         COMPUTER_BUTTON_LOCATION[1] <= pos[1] < COMPUTER_BUTTON_LOCATION[1]+COMPUTER_BUTTON_SIZE[1]):
                     break
         surface.blit(pygame.image.load("images/choose level.jpg"), (0,0))
-        # font = pygame.font.SysFont('Comic Sans MS', 20)
-        # pygame.draw.rect(surface, BROWN, (*CHOOSE_LEVEL_LOCATION, *CHOOSE_LEVEL_SIZE))
-        # surface.blit(font.render("CHOOSE LEVEL:", True, WHITE), CHOOSE_LEVEL_LOCATION)
-        # font = pygame.font.SysFont('Comic Sans MS', 14)
-        # for i in range(5):
-        #     pygame.draw.rect(surface, BROWN, (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i, *LEVEL_BUTTONS_SIZE))
-        #     surface.blit(font.render(f"{i+1}", True, WHITE), (LEVEL_BUTTONS_LOCATION[0],LEVEL_BUTTONS_LOCATION[1]+50*i))
         pygame.display.update()
         while True:
             event = pygame.event.poll()
@@ -268,16 +253,10 @@ class Front:
         """
         self.surface.fill(BEIGE)
         self.surface.blit(pygame.image.load("images/game display.jpg"), (0,0))
-        # self.surface.fill(BEIGE)
         font = pygame.font.SysFont('Comic Sans MS', 14)
-        # pygame.draw.rect(self.surface, BROWN, (*RESET_BUTTON_LOCATION, *RESET_BUTTON_SIZE))
         self.surface.blit(font.render("RESET", True, BLACK), (RESET_BUTTON_LOCATION[0]+34, RESET_BUTTON_LOCATION[1]+2))
-        # pygame.draw.rect(self.surface, BROWN, (*START_OVER_BUTTON_LOCATION, *START_OVER_BUTTON_SIZE))
         self.surface.blit(font.render("START OVER", True, BLACK), (START_OVER_BUTTON_LOCATION[0]+14, START_OVER_BUTTON_LOCATION[1]+2))
-        # pygame.draw.rect(self.surface, BROWN, (*SOUND_BUTTON_LOCATION, *SOUND_BUTTON_SIZE))
         self.surface.blit(font.render("SOUND", True, BLACK), (SOUND_BUTTON_LOCATION[0]+15, SOUND_BUTTON_LOCATION[1]+4))
-        # pygame.draw.rect(self.surface, BROWN, (*TURN_BAR_LOCATION, *TURN_BAR_SIZE))
         self.surface.blit(font.render("WHITE TURN" if turn else "BLACK TURN", True, BLACK), (TURN_BAR_LOCATION[0]+17, TURN_BAR_LOCATION[1]+6))
-        # pygame.draw.rect(self.surface, BROWN, (*STATE_BAR_LOCATION, *STATE_BAR_SIZE))
         self.surface.blit(font.render(f"{state}", True, BLACK), (STATE_BAR_LOCATION[0]+16, STATE_BAR_LOCATION[1]+4))
 
