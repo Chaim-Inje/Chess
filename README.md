@@ -26,29 +26,38 @@ The source code of Stockfish can be found at their official GitHub repository: h
 
 ## Instructions to Run the Program
 
+# Chess
+
+A Python-based chess game that works on Linux and Windows.
+
+## Instructions to Run the Program
+
 1. **Clone the Repository**
-   ```
-   git clone https://github.com/Chaim-Inje/Chess.git
-   ```
+
+git clone https://github.com/Chaim-Inje/Chess.git
+
 
 2. **Navigate to the Directory**
-   ```
-   cd Chess
-   ```
+
+cd Chess
+
 
 3. **Install Dependencies**
-   ```
-   pip install pygame os platform typing stockfish
-   ```
 
-4. **Run the Program**
-   ```
-   python main.py
-   ```
+pip install pygame typing stockfish
+
+
+4. **Grant Execute Permissions**
+
+chmod +x /home/chaimingi/Chess/stockfish-ubuntu-x86-64-avx2
+
+
+5. **Run the Program**
+
+python main.py
+
 
 If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
-```
-Enjoy your game!
 
 ## Contributing
 
