@@ -4,7 +4,6 @@ import front
 
 
 def main():
-    print(front.SURFACE_SIZE)
     pygame.init()
     pygame.event.set_blocked(None)
     pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
