@@ -24,13 +24,31 @@ This project uses the Stockfish chess engine for generating computer opponent mo
 
 The source code of Stockfish can be found at their official GitHub repository: https://github.com/official-stockfish/Stockfish.
 
-## Getting Started
+## Instructions to Run the Program
 
-To get started with this project, clone the repository and follow the instructions in the installation guide.
+1. **Clone the Repository**
+   ```
+   git clone https://github.com/Chaim-Inje/Chess.git
+   ```
 
-## Installation
+2. **Navigate to the Directory**
+   ```
+   cd Chess
+   ```
 
-*This section will be added soon*
+3. **Install Dependencies**
+   ```
+   pip install pygame os platform typing stockfish
+   ```
+
+4. **Run the Program**
+   ```
+   python main.py
+   ```
+
+If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
+```
+Enjoy your game!
 
 ## Contributing
 
