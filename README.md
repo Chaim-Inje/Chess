@@ -42,16 +42,21 @@ Note that this project is a Python-based chess game that works on Linux and Wind
    ```
    pip install pygame typing stockfish
    ```
+
+4. **Grant Execute Permissions (Linux Only)**
+   If you're on a Linux system, you might need to grant execute permissions to the Stockfish binary:
+   ```
+   chmod +x stockfish-ubuntu-x86-64-avx2
+   ```
+
 5. **Run the Program**
    ```
-   python main.py
+   python3 main.py
    ```
 
 If you encounter any issues, they might be related to permissions or your Python environment. In such cases, consider using a virtual environment or running the commands as an administrator.
 ```
-I hope this helps! Let me know if you have any other questions.## Contributing
-
-Contributions are welcome! Please read the contributing guide for details.
+Enjoy your game!
 
 ## License
 
